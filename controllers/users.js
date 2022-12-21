@@ -7,7 +7,7 @@ const router = express.Router()
 
 // GET /users/new --serves a form to create a new user
 router.get('/new',function(req,res){
-    res.render('users/new.ejs')
+    res.render('users/new.ejs',{user: res.locals.user})
 })
 
 // POST /users -- creates a new user from the form @ /users/new
@@ -29,7 +29,7 @@ router.post('/',async function(req,res){
         // log the user in (store the user's id ad a cookie in the browser)
         res.cookie('userId', newUser.id)
         // redirect to the homepage for the user
-        res.redirect('/')
+        res.redirect('/users/profile')
 
     }catch(error){
         console.log(err)
@@ -40,7 +40,8 @@ router.post('/',async function(req,res){
 // GET /users/login -- render a login form that POSTs to /users/login
 router.get('/login',function(req,res){
     res.render('users/login.ejs',{
-        message: req.query.message ? req.query.message : null
+        message: req.query.message ? req.query.message : null,
+        user: res.locals.user
     })
 })
 
@@ -66,7 +67,7 @@ router.post('/login',async function(req,res){
             // if the user is found and their password matches log them in
             console.log('loggin user in!')
             res.cookie('userId', user.id)
-            res.redirect('/')
+            res.redirect('/users/profile')
         }
     }catch(error){
         console.log(err)
@@ -81,5 +82,16 @@ router.get('/logout',function(req,res){
     res.redirect('/')
 })
 
+// GET /users/profile -- show the user their profile page
+router.get('/profile',function(req,res){
+    // if the user is not logged in -- they are not allowed to be here
+    if(!res.locals.user){
+        res.redirect('/users/login?message=You must authenticate before you are authorized to view this resource')
+    } else{
+        res.render('users/profile.ejs',{
+            user: res.locals.user
+        })
+    }
+})
 // export the router
 module.exports= router

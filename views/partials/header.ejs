@@ -9,10 +9,18 @@
 <body>
     <nav>
         <ul>
+            <!-- show home whether the user is logged in or not -->
             <li><a href='/'>Home</a></li>
-            <li><a href='/users/new'>Sign up</a></li>
-            <li><a href='/users/login'>Login</a></li>
-            <li><a href='/users/logout'>Logout</a></li>
+            <% if(user){ %>
+                <!-- show these if user is logged in -->
+                <li><a href='/users/profile'>Profile</a></li>
+                <li><a href='/users/logout'>Logout</a></li>
+                <% } else {%>
+                <!-- show these if user not logged in -->
+                <li><a href='/users/new'>Sign up</a></li>
+                <li><a href='/users/login'>Login</a></li>
+                <% } %> 
+
         </ul>
     </nav>
 <h1>Express Auth Boilerplate for p2</h1>    
