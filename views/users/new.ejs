@@ -1,0 +1,12 @@
+<%- include('../partials/header.ejs') %> 
+<h3>Sign up for an account</h3>
+<form action="/users" method="POST">
+<label for="email" >Email: </label>
+<input type="email" name="email" id="email"/>
+
+<label for="password">Password: </label>
+<input type="password" name="password" id="password"/>
+
+<button type="submit">Sign up</button>
+</form>
+<%- include('../partials/footer.ejs') %> 
