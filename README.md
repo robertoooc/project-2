@@ -4,7 +4,9 @@ An app where you can look up your favorite songs and create your own playlists
 * Javascript
 * HTML
 * CSS
- [https://developer.musixmatch.com/documentation] (Musixmatch API used for list of songs and details)
+## API 
+Musixmatch API-used for list of songs and details
+![api](proof%20of%20API.png)
 ## ERD and RESTful charts
 ![ERD](ERD.png)
 ![RESTful](RESTful.png)
