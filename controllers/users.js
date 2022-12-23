@@ -1,21 +1,24 @@
 // create an instance of express routers
 const express = require('express')
+require('dotenv').config()
 const db = require('../models')
 const router = express.Router()
 const crypto = require('crypto-js')
 const bcrypt = require('bcrypt')
-
+const axios = require('axios')
+const API_KEY =process.env.API_KEY
+const baseURL ='https://api.musixmatch.com/ws/1.1/'
 // mount our routes on the router
 
 // GET /users/new -- serves a form to create a new user
-router.get('/new', (req, res) => {
+router.get('/new', function (req, res) {
     res.render('users/new.ejs', {
         user: res.locals.user
     })
 })
 
 // POST /users -- creates a new user from the form @ /users/new
-router.post('/', async (req, res) => {
+router.post('/', async function (req, res) {
     try {
         // based on the info in the req.body, find or create user
         const [newUser, created] = await db.user.findOrCreate({
@@ -50,7 +53,7 @@ router.post('/', async (req, res) => {
 })
 
 // GET /users/login -- render a login form that POSTs to /users/login
-router.get('/login', (req, res) => {
+router.get('/login', function (req, res) {
     res.render('users/login.ejs', {
         message: req.query.message ? req.query.message : null,
         user: res.locals.user
@@ -58,7 +61,7 @@ router.get('/login', (req, res) => {
 })
 
 // POST /users/login -- ingest data from form rendered @ GET /users/login
-router.post('/login', async (req, res) => {
+router.post('/login', async function (req, res) {
     try {
         // look up the user based on their email
         const user = await db.user.findOne({
@@ -90,7 +93,7 @@ router.post('/login', async (req, res) => {
 })
 
 // GET /users/logout -- clear any cookies and redirect to the homepage
-router.get('/logout', (req, res) => {
+router.get('/logout', function (req, res) {
     // log the user out by removing the cookie
     // make a get req to /
     res.clearCookie('userId')
@@ -98,7 +101,7 @@ router.get('/logout', (req, res) => {
 })
 
 // GET /users/profile -- show the user their profile page
-router.get('/profile', (req, res) => {
+router.get('/profile', function (req, res) {
     // if the user is not logged in -- they are not allowed to be here
     if (!res.locals.user) {
         res.redirect('/users/login?message=You must authenticate before you are authorized to view this resource!')
@@ -108,6 +111,29 @@ router.get('/profile', (req, res) => {
         })
     }
 })
-
+ router.get('/songs', async function(req,res){
+    try{
+        const response = await axios.get(`https://api.musixmatch.com/ws/1.1/track.search?q_track=${req.query.search}&s_track_rating=desc&apikey=${API_KEY}`)
+        res.render('search.ejs',{
+            search: response.data.message.body.track_list,
+            name: req.query.search})
+    }catch(error){
+        console.log('You messed up in the /users/songs route')
+        res.send('You messed up in the /users/songs route')
+    }
+ })
+ router.get('/songs/:id', async function(req,res){
+    try{
+        const response = await axios.get(`https://api.musixmatch.com/ws/1.1/track.get?commontrack_id=${req.params.id}&apikey=${API_KEY}`)
+        const lyrics = await axios.get(`https://api.musixmatch.com/ws/1.1/track.lyrics.get?commontrack_id=${req.params.id}&apikey=${API_KEY}`)
+        res.render('searchSpecific.ejs',{
+            song: response.data.message.body.track,
+            lyrics:lyrics.data.message.body.lyrics,
+            user: res.locals.user
+    })
+    } catch(error){
+        res.send('you messed up in the users/songs/:id route')
+    }
+ })
 // export the router
 module.exports = router

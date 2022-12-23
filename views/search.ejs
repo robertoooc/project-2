@@ -1,0 +1,6 @@
+<h1>
+    List of searches:
+</h1>
+<% search.forEach(function(search){ %>
+    <p><a href="/users/songs/<%=search.track.commontrack_id%>"><%= search.track.track_name %>, <%= search.track.artist_name%> </a></p>
+<%})%> 
