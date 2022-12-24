@@ -1,4 +1,8 @@
 <%- include('../partials/header',{user}) %>
 <h3>Hey, <%= user.email %> thanks for logging into the app </h3>
-
+<p>view your playlist here</p>
+<p><%= playlists.length %> </p>
+<% playlists.forEach(function(playlist){ %> 
+    <p><%= playlist.name %></p>
+<%})%>
 <%- include('../partials/footer') %>

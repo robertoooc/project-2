@@ -1,6 +1,9 @@
 <h1>Specific details of song: <%=song.track_name%></h1>
 <h2>By: <%=song.artist_name%></h2>
-<h3><%=user.id%></h3>
+<form method ='POST' action="/users/songs/<%=song.commontrack_id%> ">
+<label for="sub">Add to db: </label>
+<input type="submit" id="sub">
+</form>
 <h2>Lyrics:</h2>
 <p><%=lyrics.lyrics_body%></p>
 

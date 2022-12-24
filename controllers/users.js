@@ -101,14 +101,28 @@ router.get('/logout', function (req, res) {
 })
 
 // GET /users/profile -- show the user their profile page
-router.get('/profile', function (req, res) {
+router.get('/profile', async function (req, res) {
     // if the user is not logged in -- they are not allowed to be here
-    if (!res.locals.user) {
-        res.redirect('/users/login?message=You must authenticate before you are authorized to view this resource!')
-    } else {
-        res.render('users/profile.ejs', {
-            user: res.locals.user
-        })
+    try{
+        if (!res.locals.user) {
+            res.redirect('/users/login?message=You must authenticate before you are authorized to view this resource!')
+        } else {
+            //const findUser = await db.user.findByPk(parseInt(res.locals.user.id))
+            const findPlaylists = await db.playlist.findAll({
+                where:{
+                    userId: parseInt(res.locals.user.id)
+                }
+            })
+            //if (findPlaylists.length == 0 ) findPlaylists[0]='you have no playlists' 
+
+
+            res.render('users/profile.ejs', {
+                user: res.locals.user,
+                playlists: findPlaylists
+            })
+        }
+    }catch(error){
+        res.send('you messed up in get /users/profile'+ error)
     }
 })
  router.get('/songs', async function(req,res){
@@ -132,8 +146,30 @@ router.get('/profile', function (req, res) {
             user: res.locals.user
     })
     } catch(error){
-        res.send('you messed up in the users/songs/:id route')
+        res.send('you messed up in the users/songs/:id get route')
     }
  })
+ //====NEED TO COME BACK TO THIS WILL FIRST WORK ON PLAYLISTS====//
+ router.post('/songs/:id', async function(req,res){
+    try{
+     if(res.locals.user != null){
+        const response = await axios.get(`https://api.musixmatch.com/ws/1.1/track.get?commontrack_id=${req.params.id}&apikey=${API_KEY}`)
+        const lyrics = await axios.get(`https://api.musixmatch.com/ws/1.1/track.lyrics.get?commontrack_id=${req.params.id}&apikey=${API_KEY}`)
+        const [findSong,created] = await db.song.findOrCreate({
+            where:{
+                track: parseInt(response.data.message.body.track.commontrack_id),
+                name: response.data.message.body.track.track_name,
+                artist: response.data.message.body.track.commontrack_id,
+                lyrics: DataTypes.TEXT
+            }    
+        })
+     } else{
+       res.locals('login to an account first') 
+     }
+    }catch(error){
+        res.send('you messed up in the users/songs/:id post route')
+    }
+ })
+
 // export the router
 module.exports = router
