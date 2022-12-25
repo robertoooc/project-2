@@ -1,8 +1,11 @@
 <%- include('../partials/header',{user}) %>
 <h3>Hey, <%= user.email %> thanks for logging into the app </h3>
 <p>view your playlist here</p>
-<p><%= playlists.length %> </p>
-<% playlists.forEach(function(playlist){ %> 
-    <p><%= playlist.name %></p>
+
+<% playlists.forEach(function(playlist){ %>
+<p><%= playlist.name %> </p>
+<form method="GET" action='/users/playlists/<%=playlist.name%>'>
+<button type="submit">See the deets</button>
+</form>
 <%})%>
 <%- include('../partials/footer') %>

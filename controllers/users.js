@@ -165,11 +165,24 @@ router.get('/profile', async function (req, res) {
         })
      } else{
        res.locals('login to an account first') 
-     }
+     } 
     }catch(error){
         res.send('you messed up in the users/songs/:id post route')
     }
  })
-
+    router.get('/playlists/:id', async function(req,res){
+        try{
+            const findPlaylist = await db.playlist.findOne({
+                where:{
+                  userId: parseInt(res.locals.user.id),
+                  name: req.params.id
+                }
+            })
+            const songs = await findPlaylist.getSongs()
+            res.send(songs)
+        }catch(error){
+           res.send('You messed up in the get users/playlists/:id' + error) 
+        }
+    })
 // export the router
 module.exports = router
