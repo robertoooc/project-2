@@ -8,18 +8,23 @@
 <button type="submit">See the deets</button>
 </form>
 
-<!-- <form method="POST" action="/users/playlists/?_method=PUT">
-<button type="submit">Change name</button>
-</form>
-
-<form method="POST" action="/users/playlists/?_method=DELETE">
-    <button type="submit"></button>
-</form> -->
 <%})%>
 
 <form method="POST" action="/users/playlists">
     <label for="newPlaylist">Create a new playlist: </label>
     <input id='newPlaylist' type ='text' name='newPlaylist' required/>
     <button type="Submit">Submit</button>
+</form>
+
+<form method ='POST' action="/users/playlists/?_method=PUT">
+    <label for="playlist">Rename a playlist:</label>
+    <select name="playlist" id="playlist">
+        <% playlists.forEach(function(playlist){ %> 
+            <option value="<%=playlist.name%>"><%=playlist.name%> </option>
+            <% }) %> 
+    </select>
+    <label for="newName">New name:</label>
+    <input id="newName" type="text" name ='newName' required/>
+    <button type="submit">Add to playlist</button>
 </form>
 <%- include('../partials/footer') %>
