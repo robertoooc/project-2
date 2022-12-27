@@ -221,7 +221,26 @@ router.get('/profile', async function (req, res) {
                 res.redirect('/users/profile')
             }
         }catch(error){
-
+            res.send('you messed up in the post /users/pplaylist '+error)
+        }
+    })
+    router.delete('/playlists/:playlistName/songs/:songId', async function(req,res){
+        try{
+            const findPlaylist = await db.playlist.findOne({
+                where:{
+                    userId: res.locals.user.id,
+                    name: req.params.playlistName
+                }
+            })
+            const findSong = await db.song.findOne({
+                where:{
+                    track: req.params.songId
+                }
+            })
+            await findPlaylist.removeSong(findSong)
+            res.redirect('/users/profile')
+        }catch(error){
+            res.send('you messed up in the delete /users/pplaylist '+error)
         }
     })
 // export the router

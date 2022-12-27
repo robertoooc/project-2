@@ -1,6 +1,8 @@
 
 <h2>You will see the list of songs inside of your <%=playlist.name%> playlist</h2>
 <%songs.forEach(function(song){  %> 
-    <form method=""></form>
-<p><a href="/users/songs/<%=song.track%>"><%= song.name %></a></p>
-<%})%>
+    <p><a href="/users/songs/<%=song.track%>"><%= song.name %></a></p>
+    <form method='POST' action="/users/playlists/<%=playlist.name%>/songs/<%=song.track%>/?_method=DELETE">
+        <button type="submit">Remove from playlist</button>
+    </form>
+    <%})%>
