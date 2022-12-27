@@ -140,10 +140,15 @@ router.get('/profile', async function (req, res) {
     try{
         const response = await axios.get(`https://api.musixmatch.com/ws/1.1/track.get?commontrack_id=${req.params.id}&apikey=${API_KEY}`)
         const lyrics = await axios.get(`https://api.musixmatch.com/ws/1.1/track.lyrics.get?commontrack_id=${req.params.id}&apikey=${API_KEY}`)
+        const findUserPlaylist= await db.playlist.findAll({
+            where:{
+                userId: res.locals.user.id
+            }
+        })
         res.render('searchSpecific.ejs',{
             song: response.data.message.body.track,
             lyrics:lyrics.data.message.body.lyrics,
-            user: res.locals.user
+            playlists: findUserPlaylist
     })
     } catch(error){
         res.send('you messed up in the users/songs/:id get route')
@@ -155,19 +160,29 @@ router.get('/profile', async function (req, res) {
      if(res.locals.user != null){
         const response = await axios.get(`https://api.musixmatch.com/ws/1.1/track.get?commontrack_id=${req.params.id}&apikey=${API_KEY}`)
         const lyrics = await axios.get(`https://api.musixmatch.com/ws/1.1/track.lyrics.get?commontrack_id=${req.params.id}&apikey=${API_KEY}`)
+        const findPlaylist = await db.playlist.findOne({
+            where:{
+                userId: res.locals.user.id,
+                name: req.body.playlist
+            }
+        })
         const [findSong,created] = await db.song.findOrCreate({
             where:{
-                track: parseInt(response.data.message.body.track.commontrack_id),
+                track: parseInt(req.params.id),
                 name: response.data.message.body.track.track_name,
-                artist: response.data.message.body.track.commontrack_id,
-                lyrics: DataTypes.TEXT
+                artist: response.data.message.body.track.artist_name,
+                lyrics: lyrics.data.message.body.lyrics.lyrics_body,
             }    
         })
+        await findPlaylist.addSong(findSong)
+         res.redirect('/users/profile')
+
      } else{
        res.send('login to an account first') 
      } 
     }catch(error){
-        res.send('you messed up in the users/songs/:id post route')
+        console.log(req.params.id)
+        res.send('you messed up in the users/songs/:id post route'+ error)
     }
  })
     router.get('/playlists/:id', async function(req,res){

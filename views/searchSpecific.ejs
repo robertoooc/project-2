@@ -1,8 +1,14 @@
 <h1>Specific details of song: <%=song.track_name%></h1>
 <h2>By: <%=song.artist_name%></h2>
+
 <form method ='POST' action="/users/songs/<%=song.commontrack_id%> ">
-<label for="sub">Add to db: </label>
-<input type="submit" id="sub">
+    <label for="list">Select playlist:</label>
+    <select name="playlist" id="list">
+        <% playlists.forEach(function(playlist){ %> 
+            <option value="<%=playlist.name%>"><%=playlist.name%> </option>
+            <% }) %> 
+    </select>
+    <button type="submit">Add to playlist</button>
 </form>
 <h2>Lyrics:</h2>
 <p><%=lyrics.lyrics_body%></p>
