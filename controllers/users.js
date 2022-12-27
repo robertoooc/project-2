@@ -164,7 +164,7 @@ router.get('/profile', async function (req, res) {
             }    
         })
      } else{
-       res.locals('login to an account first') 
+       res.send('login to an account first') 
      } 
     }catch(error){
         res.send('you messed up in the users/songs/:id post route')
@@ -179,9 +179,34 @@ router.get('/profile', async function (req, res) {
                 }
             })
             const songs = await findPlaylist.getSongs()
-            res.send(songs)
+            res.render('playlistsongs.ejs',{
+                playlist: findPlaylist,
+                songs: songs
+            })
         }catch(error){
            res.send('You messed up in the get users/playlists/:id' + error) 
+        }
+    })
+    router.post('/playlists', async function(req,res){
+        try{
+            //const findUser = await db.user.findByPk(res.locals.user.id)
+            const findPlaylist = await db.playlist.findOne({
+                where:{
+                    userId: res.locals.user.id,
+                    name: req.body.newPlaylist
+                }
+            })
+            if(findPlaylist){
+                res.send('you already have a playlist with that name')
+            }else{
+                const createPlaylist = await db.playlist.create({
+                    userId: res.locals.user.id,
+                    name:req.body.newPlaylist
+                })
+                res.redirect('/users/profile')
+            }
+        }catch(error){
+
         }
     })
 // export the router

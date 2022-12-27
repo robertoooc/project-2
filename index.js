@@ -1,12 +1,14 @@
 // required packages
 require('dotenv').config()
 const express = require('express')
+const methodOverride = require('method-override')
 const cookieParser = require('cookie-parser')
 const db = require('./models')
 const crypto = require('crypto-js')
 
 // app config
 const app = express()
+app.use(methodOverride('_method'))
 const PORT = process.env.PORT || 8000
 app.set('view engine', 'ejs')
 // parse request bodies from html forms

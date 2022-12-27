@@ -7,5 +7,19 @@
 <form method="GET" action='/users/playlists/<%=playlist.name%>'>
 <button type="submit">See the deets</button>
 </form>
+
+<!-- <form method="POST" action="/users/playlists/?_method=PUT">
+<button type="submit">Change name</button>
+</form>
+
+<form method="POST" action="/users/playlists/?_method=DELETE">
+    <button type="submit"></button>
+</form> -->
 <%})%>
+
+<form method="POST" action="/users/playlists">
+    <label for="newPlaylist">Create a new playlist: </label>
+    <input id='newPlaylist' type ='text' name='newPlaylist' required/>
+    <button type="Submit">Submit</button>
+</form>
 <%- include('../partials/footer') %>
