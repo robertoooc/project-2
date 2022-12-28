@@ -7,6 +7,7 @@ const crypto = require('crypto-js')
 const bcrypt = require('bcrypt')
 const axios = require('axios')
 const API_KEY =process.env.API_KEY
+const OTHER_KEY =process.env.OTHER_KEY
 const baseURL ='https://api.musixmatch.com/ws/1.1/'
 // mount our routes on the router
 
@@ -140,16 +141,19 @@ router.get('/profile', async function (req, res) {
     try{
         const response = await axios.get(`https://api.musixmatch.com/ws/1.1/track.get?commontrack_id=${req.params.id}&apikey=${API_KEY}`)
         const lyrics = await axios.get(`https://api.musixmatch.com/ws/1.1/track.lyrics.get?commontrack_id=${req.params.id}&apikey=${API_KEY}`)
+        const img = await axios.get(`http://ws.audioscrobbler.com/2.0/?method=album.getinfo&api_key=${OTHER_KEY}&artist=${response.data.message.body.track.artist_name}&album=${response.data.message.body.track.album_name}&format=json`)
         const findUserPlaylist= await db.playlist.findAll({
             where:{
                 userId: res.locals.user.id
             }
         })
-        res.render('searchSpecific.ejs',{
-            song: response.data.message.body.track,
-            lyrics:lyrics.data.message.body.lyrics,
-            playlists: findUserPlaylist
-    })
+        res.send(img.data)
+    //     res.render('searchSpecific.ejs',{
+    //         song: response.data.message.body.track,
+    //         lyrics:lyrics.data.message.body.lyrics,
+    //         playlists: findUserPlaylist,
+
+    // })
     } catch(error){
         res.send('you messed up in the users/songs/:id get route')
     }
