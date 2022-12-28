@@ -256,6 +256,19 @@ router.get('/profile', async function (req, res) {
             res.send('you messed up in the put /users/pplaylist '+error)   
         }
     })
+    router.delete('/playlists',async function(req,res){
+        try{
+            const findPlaylist = await db.playlist.destroy({
+                where:{
+                    userId: res.locals.user.id,
+                    name: req.body.deletePlaylist
+                }
+            })
+            res.redirect('/users/profile')
+        }catch(error){
+            res.send('you messed up in the delete /users/players ' +error)
+        }
+    })
     router.delete('/playlists/:playlistName/songs/:songId', async function(req,res){
         try{
             const findPlaylist = await db.playlist.findOne({

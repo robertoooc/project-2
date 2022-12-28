@@ -27,4 +27,13 @@
     <input id="newName" type="text" name ='newName' required/>
     <button type="submit">Add to playlist</button>
 </form>
+<form method ='POST' action="/users/playlists/?_method=DELETE">
+    <label for="deletePlaylist">Delete a playlist:</label>
+    <select name="deletePlaylist" id="deletePlaylist">
+        <% playlists.forEach(function(playlist){ %> 
+            <option value="<%=playlist.name%>"><%=playlist.name%> </option>
+            <% }) %> 
+    </select>
+    <button type="submit">Remove</button>
+</form>
 <%- include('../partials/footer') %>
