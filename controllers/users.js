@@ -147,13 +147,16 @@ router.get('/profile', async function (req, res) {
                 userId: res.locals.user.id
             }
         })
-        res.send(img.data)
-    //     res.render('searchSpecific.ejs',{
-    //         song: response.data.message.body.track,
-    //         lyrics:lyrics.data.message.body.lyrics,
-    //         playlists: findUserPlaylist,
+        let src = img.data.album.image[2]
+        src['img'] =src['#text']
+        //res.send(src)
+        res.render('searchSpecific.ejs',{
+            song: response.data.message.body.track,
+            lyrics:lyrics.data.message.body.lyrics,
+            playlists: findUserPlaylist,
+            img: src
 
-    // })
+    })
     } catch(error){
         res.send('you messed up in the users/songs/:id get route')
     }
