@@ -2,6 +2,7 @@
 
 <h2>By: <%=song.artist_name%></h2>
 <img alt="<%=song.track_name%>" src="<%=img.img%>"/>
+<% if(playlists) {%> 
 <form method ='POST' action="/users/songs/<%=song.commontrack_id%> ">
     <label for="list">Select playlist:</label>
     <select name="playlist" id="list">
@@ -11,8 +12,13 @@
     </select>
     <button type="submit">Add to playlist</button>
 </form>
+<% } %> 
 <h2>Lyrics:</h2>
-<p><%=lyrics.lyrics_body%></p>
+<% if(lyrics === undefined){ %> 
+    <p>There are no lyrics available for this song</p>
+    <% }else{ %>
+    <p><%=lyrics.lyrics_body%></p> 
+    <p><%=lyrics.lyrics_copyright%></p>
+    <script type="text/javascript" src="<%=lyrics.script_tracking_url%>"></script>
+<%} %> 
 
-<p><%=lyrics.lyrics_copyright%></p>
-<script type="text/javascript" src="<%=lyrics.script_tracking_url%>"></script>

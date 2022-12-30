@@ -129,27 +129,64 @@ router.get('/profile', async function (req, res) {
  router.get('/songs', async function(req,res){
     try{
         const response = await axios.get(`https://api.musixmatch.com/ws/1.1/track.search?q_track=${req.query.search}&s_track_rating=desc&apikey=${API_KEY}`)
+        // let arr=[]
+        // let img
+        // response.data.message.body.track_list.forEach(async function(song){
+        //      img = await axios.get(`http://ws.audioscrobbler.com/2.0/?method=album.getinfo&api_key=${OTHER_KEY}&artist=${song.track.artist_name}&album=${song.track.album_name}&format=json`)
+        //     let src = img.data.album.image[1]
+        //     src['img'] =src['#text']
+        //     arr.push(`${src.img}`)
+        // })
+        // res.send(arr.length)
+        
+    //    for(let i = 0; i <10; i++){
+    //         let artistName = response.data.message.body.track_list[1].track.artist_name
+    //         let albumName = response.data.message.body.track_list[1].track.album_name
+    //         // let img = await axios.get(`http://ws.audioscrobbler.com/2.0/?method=album.getinfo&api_key=${OTHER_KEY}&artist=${artistName}&album=${albumName}&format=json`)
+    //         //let src = img.data.album.image[1].size
+    //         //src['img'] =src['#text']
+    //         //imgArr[i] = `${img.data.album.image[1].size}`
+    //         imgArr[i] = artistName
+    //     }
+        //const name = response.data.message.body.track_list
+        //res.send(response.data)
+        //res.send(response.data.message.body.track_list[0].track.artist_name)
         res.render('search.ejs',{
             search: response.data.message.body.track_list,
             name: req.query.search})
     }catch(error){
         console.log('You messed up in the /users/songs route')
-        res.send('You messed up in the /users/songs route')
+        res.send('You messed up in the /users/songs route' + error)
     }
  })
  router.get('/songs/:id', async function(req,res){
     try{
         const response = await axios.get(`https://api.musixmatch.com/ws/1.1/track.get?commontrack_id=${req.params.id}&apikey=${API_KEY}`)
         const lyrics = await axios.get(`https://api.musixmatch.com/ws/1.1/track.lyrics.get?commontrack_id=${req.params.id}&apikey=${API_KEY}`)
+        // if(lyrics.data.message.body.lyrics ==''){
+        //     res.send('this has no lyrics')
+        // }else{
+        //     res.send('this does')
+        // }
         const img = await axios.get(`http://ws.audioscrobbler.com/2.0/?method=album.getinfo&api_key=${OTHER_KEY}&artist=${response.data.message.body.track.artist_name}&album=${response.data.message.body.track.album_name}&format=json`)
-        const findUserPlaylist= await db.playlist.findAll({
-            where:{
-                userId: res.locals.user.id
-            }
-        })
-        let src = img.data.album.image[2]
+        let findUserPlaylist
+        if (res.locals.user){
+             findUserPlaylist= await db.playlist.findAll({
+                where:{
+                    userId: res.locals.user.id
+                }
+            })
+        }else{
+            findUserPlaylist= false
+        }
+        let src = img.data.album.image[3]
         src['img'] =src['#text']
+        if(src.img == ''){
+            src.img='https://www.pbpusa.org/Shared/img/notfound.png'
+        }
+
         //res.send(src)
+        //res.send(lyrics.data)
         res.render('searchSpecific.ejs',{
             song: response.data.message.body.track,
             lyrics:lyrics.data.message.body.lyrics,
@@ -158,10 +195,9 @@ router.get('/profile', async function (req, res) {
 
     })
     } catch(error){
-        res.send('you messed up in the users/songs/:id get route')
+        res.send('you messed up in the users/songs/:id get route'+error)
     }
  })
- //====NEED TO COME BACK TO THIS WILL FIRST WORK ON PLAYLISTS====//
  router.post('/songs/:id', async function(req,res){
     try{
      if(res.locals.user != null){
