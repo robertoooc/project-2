@@ -28,7 +28,7 @@ router.post('/', async function (req, res) {
         }) 
         // if the user is found, redirect user to login
         if (!created) {
-            console.log('user exists!')
+            //console.log('user exists!')
             res.redirect('/users/login?message=Please log in to continue.')
         } else {
             // here we know its a new user
@@ -47,7 +47,7 @@ router.post('/', async function (req, res) {
         }
 
     } catch (err) {
-        console.log(err)
+        //console.log(err)
         res.status(500).send('server error')
     }
 })
@@ -79,7 +79,7 @@ router.post('/login', async function (req, res) {
             res.redirect('/users/login?message=' + badCredentialMessage)
         } else {
             // if the user is found and their password matches log them in
-            console.log('loggin user in!')
+            //console.log('loggin user in!')
             const encryptedId = crypto.AES.encrypt(String(user.id), process.env.SECRET)
             const encryptedIdString = encryptedId.toString()
             // place the encrypted id in a cookie
@@ -87,7 +87,7 @@ router.post('/login', async function (req, res) {
             res.redirect('/users/profile')
         }
     } catch (err) {
-        console.log(err)
+        //console.log(err)
         res.status(500).send('server error')
     }
 })
@@ -131,7 +131,7 @@ router.get('/profile', async function (req, res) {
             search: response.data.message.body.track_list,
             name: req.query.search})
     }catch(error){
-        console.log('You messed up in the /users/songs route')
+       // console.log('You messed up in the /users/songs route')
         res.send('You messed up in the /users/songs route' + error)
     }
  }) 
@@ -145,7 +145,16 @@ router.get('/profile', async function (req, res) {
              lyrics = lyrics.data.message.body.lyrics
 
         } else{ lyrics = false}
-        const img = await axios.get(`http://ws.audioscrobbler.com/2.0/?method=album.getinfo&api_key=${OTHER_KEY}&artist=${response.data.message.body.track.artist_name}&album=${response.data.message.body.track.album_name}&format=json`)
+        let str =response.data.message.body.track.artist_name
+        //str = str.toLowerCase()
+        let check = `feat.`
+        if(str.includes(check)){
+        //console.log(str.indexOf(check))
+        let cutOff = str.indexOf(check) - 1
+        str = str.slice(0,cutOff)
+        //console.log(str)
+        }
+        const img = await axios.get(`http://ws.audioscrobbler.com/2.0/?method=album.getinfo&api_key=${OTHER_KEY}&artist=${str}&album=${response.data.message.body.track.album_name}&format=json`)
         let findUserPlaylist
         if (res.locals.user){
              findUserPlaylist= await db.playlist.findAll({
@@ -168,7 +177,7 @@ router.get('/profile', async function (req, res) {
             img: src
     })
     } catch(error){
-        console.log(error)
+       // console.log(error)
         res.send('you messed up in the users/songs/:id get route'+error)
     }
  })
@@ -199,7 +208,7 @@ router.get('/profile', async function (req, res) {
        res.send('login to an account first') 
      } 
     }catch(error){
-        console.log(req.params.id)
+       // console.log(req.params.id)
         res.send('you messed up in the users/songs/:id post route'+ error)
     }
  })

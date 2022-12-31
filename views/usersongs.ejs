@@ -2,7 +2,7 @@
 <h1>
     List of all songs user has in playlists:
 </h1>
-<% song.forEach(function(search){ %>
-<p><%= search.name %> </p>
+<% song.forEach(function(track){ %>
+<p><a href="/users/songs/<%=track.track%>"><%= track.name %></a></p>
 <%})%> 
 <%- include('partials/footer.ejs') %> 

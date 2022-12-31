@@ -5,16 +5,11 @@ const router = express.Router()
 
 router.get('/songs', async function(req,res){
     try{
-        // const findPlaylist = await db.playlist.findAll({
-        //     where:{
-        //       userId: parseInt(res.locals.user.id)
-        //     }
-        // })
+        if(res.locals.user){
         const findUser = await db.user.findByPk(res.locals.user.id)
         const findPlaylists = await findUser.getPlaylists()
         let allSongs =[]
         let songs
-        let copy = false
         for(let i =0; i < findPlaylists.length; i++){
            songs = await findPlaylists[i].getSongs()
            for(let j =0; j < songs.length;j++){
@@ -27,6 +22,9 @@ router.get('/songs', async function(req,res){
         const unique = [...iterator]
     
         res.render('usersongs.ejs',{song: unique})
+    }else{
+        res.send('loggin first')
+    }
     }catch(error){
         res.send('You messed up in the get /playlists/songs' + error) 
     }
@@ -46,7 +44,7 @@ router.get('/songs', async function(req,res){
                 songs: songs
             })
         }catch(error){
-            console.log(error)
+           // console.log(error)
            res.send('You messed up in the get /playlists/:id' + error) 
         }
     })
