@@ -144,40 +144,60 @@ router.get('/profile', async function (req, res) {
              lyrics = await axios.get(`https://api.musixmatch.com/ws/1.1/track.lyrics.get?commontrack_id=${req.params.id}&apikey=${API_KEY}`)
              lyrics = lyrics.data.message.body.lyrics
 
-        } else{ lyrics = false}
+            } else{ lyrics = false}
+            let findUserPlaylist
+            if (res.locals.user){
+                 findUserPlaylist= await db.playlist.findAll({
+                    where:{
+                        userId: res.locals.user.id
+                    }
+                })
+            }else{
+                findUserPlaylist= false
+            }
         let str =response.data.message.body.track.artist_name
         //str = str.toLowerCase()
         let check = `feat.`
         if(str.includes(check)){
-        //console.log(str.indexOf(check))
-        let cutOff = str.indexOf(check) - 1
-        str = str.slice(0,cutOff)
-        //console.log(str)
+            //console.log(str.indexOf(check))
+            let cutOff = str.indexOf(check) - 1
+            str = str.slice(0,cutOff)
+            //console.log(str)
         }
-        const img = await axios.get(`http://ws.audioscrobbler.com/2.0/?method=album.getinfo&api_key=${OTHER_KEY}&artist=${str}&album=${response.data.message.body.track.album_name}&format=json`)
-        let findUserPlaylist
-        if (res.locals.user){
-             findUserPlaylist= await db.playlist.findAll({
-                where:{
-                    userId: res.locals.user.id
+        let alb = response.data.message.body.track.album_name
+        alb = alb.toLowerCase()
+        let check2 = `- single`
+        if(alb.includes(check2)){
+            let cutOfff = alb.indexOf(check2) - 1
+            alb = alb.slice(0,cutOfff)
+        }
+        // let src ={
+        //     img:'https://www.pbpusa.org/Shared/img/notfound.png'
+        // }
+        //console.log(alb + str)
+            const img = await axios.get(`http://ws.audioscrobbler.com/2.0/?method=album.getinfo&api_key=${OTHER_KEY}&artist=${str}&album=${alb}&format=json`)
+            // if(img.data.error == 6){
+            //     console.log('erorror roo 🔄🔄🔄')
+            //     src = {
+            //         img:'https://www.pbpusa.org/Shared/img/notfound.png'
+            //     }
+            // }else{
+            let src = img.data.album.image[4]
+                src['img'] =src['#text']
+                if(src.img == ''){
+                        src.img='https://www.pbpusa.org/Shared/img/notfound.png'
                 }
-            })
-        }else{
-            findUserPlaylist= false
-        }
-        let src = img.data.album.image[4]
-        src['img'] =src['#text']
-        if(src.img == ''){
-            src.img='https://www.pbpusa.org/Shared/img/notfound.png'
-        }
+            
+
+        //onsole.log(str+response.data.message.body.track.album_name)
         res.render('searchSpecific.ejs',{
-            song: response.data.message.body.track,
+            song: response.data.message.body.track,    
             lyrics:lyrics,
             playlists: findUserPlaylist,
             img: src
     })
     } catch(error){
-       // console.log(error)
+        console.log(error+'🐥🐥🐥🐥🐥')
         res.send('you messed up in the users/songs/:id get route'+error)
     }
  })
