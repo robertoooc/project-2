@@ -4,19 +4,19 @@
 
 <% playlists.forEach(function(playlist){ %>
 <p><%= playlist.name %> </p>
-<form method="GET" action='/users/playlists/<%=playlist.name%>'>
+<form method="GET" action='/playlists/<%=playlist.name%>'>
 <button type="submit">See the deets</button>
 </form>
 
 <%})%>
 
-<form method="POST" action="/users/playlists">
+<form method="POST" action="/playlists">
     <label for="newPlaylist">Create a new playlist: </label>
     <input id='newPlaylist' type ='text' name='newPlaylist' required/>
     <button type="Submit">Submit</button>
 </form>
 
-<form method ='POST' action="/users/playlists/?_method=PUT">
+<form method ='POST' action="/playlists/?_method=PUT">
     <label for="playlist">Rename a playlist:</label>
     <select name="playlist" id="playlist">
         <% playlists.forEach(function(playlist){ %> 
@@ -27,7 +27,7 @@
     <input id="newName" type="text" name ='newName' required/>
     <button type="submit">Add to playlist</button>
 </form>
-<form method ='POST' action="/users/playlists/?_method=DELETE">
+<form method ='POST' action="/playlists/?_method=DELETE">
     <label for="deletePlaylist">Delete a playlist:</label>
     <select name="deletePlaylist" id="deletePlaylist">
         <% playlists.forEach(function(playlist){ %> 

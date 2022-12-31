@@ -102,21 +102,18 @@ router.get('/logout', function (req, res) {
 })
 
 // GET /users/profile -- show the user their profile page
+                    //==SHOWS LIST OF PLAYLISTS USER HAS==\\
 router.get('/profile', async function (req, res) {
     // if the user is not logged in -- they are not allowed to be here
     try{
         if (!res.locals.user) {
             res.redirect('/users/login?message=You must authenticate before you are authorized to view this resource!')
         } else {
-            //const findUser = await db.user.findByPk(parseInt(res.locals.user.id))
             const findPlaylists = await db.playlist.findAll({
                 where:{
                     userId: parseInt(res.locals.user.id)
                 }
-            })
-            //if (findPlaylists.length == 0 ) findPlaylists[0]='you have no playlists' 
-
-
+            }) 
             res.render('users/profile.ejs', {
                 user: res.locals.user,
                 playlists: findPlaylists
@@ -126,31 +123,11 @@ router.get('/profile', async function (req, res) {
         res.send('you messed up in get /users/profile'+ error)
     }
 })
+                    //==READS LIST OF SONGS FROM SEARCH==\\
  router.get('/songs', async function(req,res){
     try{
         const response = await axios.get(`https://api.musixmatch.com/ws/1.1/track.search?q_track=${req.query.search}&s_track_rating=desc&apikey=${API_KEY}`)
-        // let arr=[]
-        // let img
-        // response.data.message.body.track_list.forEach(async function(song){
-        //      img = await axios.get(`http://ws.audioscrobbler.com/2.0/?method=album.getinfo&api_key=${OTHER_KEY}&artist=${song.track.artist_name}&album=${song.track.album_name}&format=json`)
-        //     let src = img.data.album.image[1]
-        //     src['img'] =src['#text']
-        //     arr.push(`${src.img}`)
-        // })
-        // res.send(arr.length)
-        
-    //    for(let i = 0; i <10; i++){
-    //         let artistName = response.data.message.body.track_list[1].track.artist_name
-    //         let albumName = response.data.message.body.track_list[1].track.album_name
-    //         // let img = await axios.get(`http://ws.audioscrobbler.com/2.0/?method=album.getinfo&api_key=${OTHER_KEY}&artist=${artistName}&album=${albumName}&format=json`)
-    //         //let src = img.data.album.image[1].size
-    //         //src['img'] =src['#text']
-    //         //imgArr[i] = `${img.data.album.image[1].size}`
-    //         imgArr[i] = artistName
-    //     }
-        //const name = response.data.message.body.track_list
-        //res.send(response.data)
-        //res.send(response.data.message.body.track_list[0].track.artist_name)
+
         res.render('search.ejs',{
             search: response.data.message.body.track_list,
             name: req.query.search})
@@ -158,16 +135,17 @@ router.get('/profile', async function (req, res) {
         console.log('You messed up in the /users/songs route')
         res.send('You messed up in the /users/songs route' + error)
     }
- })
+ }) 
+                     //==READS SPECIFIC SONG==\\
  router.get('/songs/:id', async function(req,res){
     try{
         const response = await axios.get(`https://api.musixmatch.com/ws/1.1/track.get?commontrack_id=${req.params.id}&apikey=${API_KEY}`)
-        const lyrics = await axios.get(`https://api.musixmatch.com/ws/1.1/track.lyrics.get?commontrack_id=${req.params.id}&apikey=${API_KEY}`)
-        // if(lyrics.data.message.body.lyrics ==''){
-        //     res.send('this has no lyrics')
-        // }else{
-        //     res.send('this does')
-        // }
+        let lyrics
+        if(response.data.message.body.track.has_lyrics == '1'){
+             lyrics = await axios.get(`https://api.musixmatch.com/ws/1.1/track.lyrics.get?commontrack_id=${req.params.id}&apikey=${API_KEY}`)
+             lyrics = lyrics.data.message.body.lyrics
+
+        } else{ lyrics = false}
         const img = await axios.get(`http://ws.audioscrobbler.com/2.0/?method=album.getinfo&api_key=${OTHER_KEY}&artist=${response.data.message.body.track.artist_name}&album=${response.data.message.body.track.album_name}&format=json`)
         let findUserPlaylist
         if (res.locals.user){
@@ -179,25 +157,23 @@ router.get('/profile', async function (req, res) {
         }else{
             findUserPlaylist= false
         }
-        let src = img.data.album.image[3]
+        let src = img.data.album.image[4]
         src['img'] =src['#text']
         if(src.img == ''){
             src.img='https://www.pbpusa.org/Shared/img/notfound.png'
         }
-
-        //res.send(src)
-        //res.send(lyrics.data)
         res.render('searchSpecific.ejs',{
             song: response.data.message.body.track,
-            lyrics:lyrics.data.message.body.lyrics,
+            lyrics:lyrics,
             playlists: findUserPlaylist,
             img: src
-
     })
     } catch(error){
+        console.log(error)
         res.send('you messed up in the users/songs/:id get route'+error)
     }
  })
+                     //==ADDS SONG TO SPECIFIC PLAYLIST==\\
  router.post('/songs/:id', async function(req,res){
     try{
      if(res.locals.user != null){
@@ -228,101 +204,5 @@ router.get('/profile', async function (req, res) {
         res.send('you messed up in the users/songs/:id post route'+ error)
     }
  })
-    router.get('/playlists/:id', async function(req,res){
-        try{
-            const findPlaylist = await db.playlist.findOne({
-                where:{
-                  userId: parseInt(res.locals.user.id),
-                  name: req.params.id
-                }
-            })
-            const songs = await findPlaylist.getSongs()
-            res.render('playlistsongs.ejs',{
-                playlist: findPlaylist,
-                songs: songs
-            })
-        }catch(error){
-            console.log(error)
-           res.send('You messed up in the get users/playlists/:id' + error) 
-        }
-    })
-    router.post('/playlists', async function(req,res){
-        try{
-            //const findUser = await db.user.findByPk(res.locals.user.id)
-            const findPlaylist = await db.playlist.findOne({
-                where:{
-                    userId: res.locals.user.id,
-                    name: req.body.newPlaylist
-                }
-            })
-            if(findPlaylist){
-                res.send('you already have a playlist with that name')
-            }else{
-                const createPlaylist = await db.playlist.create({
-                    userId: res.locals.user.id,
-                    name:req.body.newPlaylist
-                })
-                res.redirect('/users/profile')
-            }
-        }catch(error){
-            res.send('you messed up in the post /users/pplaylist '+error)
-        }
-    })
-    router.put('/playlists', async function(req,res){
-        try{
-            const findName = await db.playlist.findOne({
-                where:{
-                    userId: res.locals.user.id,
-                    name: req.body.newName
-                }
-            })
-            const findPlaylist = await db.playlist.findOne({
-                where:{
-                    userId: res.locals.user.id,
-                    name: req.body.playlist
-                }
-            }) 
-            if(!findName){
-                await findPlaylist.update({name: req.body.newName})
-                res.redirect('/users/profile')
-            }else{
-                res.send('nooo')
-            }
-        }catch(error){
-            res.send('you messed up in the put /users/pplaylist '+error)   
-        }
-    })
-    router.delete('/playlists',async function(req,res){
-        try{
-            const findPlaylist = await db.playlist.destroy({
-                where:{
-                    userId: res.locals.user.id,
-                    name: req.body.deletePlaylist
-                }
-            })
-            res.redirect('/users/profile')
-        }catch(error){
-            res.send('you messed up in the delete /users/players ' +error)
-        }
-    })
-    router.delete('/playlists/:playlistName/songs/:songId', async function(req,res){
-        try{
-            const findPlaylist = await db.playlist.findOne({
-                where:{
-                    userId: res.locals.user.id,
-                    name: req.params.playlistName
-                }
-            })
-            const findSong = await db.song.findOne({
-                where:{
-                    track: req.params.songId
-                }
-            })
-            await findPlaylist.removeSong(findSong)
-            res.redirect('/users/profile')
-        }catch(error){
-            res.send('you messed up in the delete /users/pplaylist '+error)
-        }
-    })
 // export the router
 module.exports = router
