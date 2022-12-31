@@ -1,0 +1,8 @@
+<%- include('partials/header.ejs',{user}) %> 
+<h1>
+    List of all songs user has in playlists:
+</h1>
+<% song.forEach(function(search){ %>
+<p><%= search.name %> </p>
+<%})%> 
+<%- include('partials/footer.ejs') %> 

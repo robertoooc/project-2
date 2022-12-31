@@ -1,4 +1,5 @@
 
+<%- include('partials/header.ejs',{user}) %> 
 <h2>You will see the list of songs inside of your <%=playlist.name%> playlist</h2>
 <%songs.forEach(function(song){  %> 
     <p><a href="/users/songs/<%=song.track%>"><%= song.name %></a></p>
@@ -6,3 +7,4 @@
         <button type="submit">Remove from playlist</button>
     </form>
     <%})%>
+    <%- include('partials/footer.ejs') %> 

@@ -3,6 +3,34 @@ require('dotenv').config()
 const db = require('../models')
 const router = express.Router()
 
+router.get('/songs', async function(req,res){
+    try{
+        // const findPlaylist = await db.playlist.findAll({
+        //     where:{
+        //       userId: parseInt(res.locals.user.id)
+        //     }
+        // })
+        const findUser = await db.user.findByPk(res.locals.user.id)
+        const findPlaylists = await findUser.getPlaylists()
+        let allSongs =[]
+        let songs
+        let copy = false
+        for(let i =0; i < findPlaylists.length; i++){
+           songs = await findPlaylists[i].getSongs()
+           for(let j =0; j < songs.length;j++){
+            allSongs.push(songs[j])
+           }
+        }
+        const newArr = allSongs.map((song) => [song.id, song]);
+        const newMap = new Map(newArr);
+        const iterator = newMap.values();
+        const unique = [...iterator]
+    
+        res.render('usersongs.ejs',{song: unique})
+    }catch(error){
+        res.send('You messed up in the get /playlists/songs' + error) 
+    }
+})
                      //==READS SPECIFIC USERS PLAYLIST==\\
     router.get('/:id', async function(req,res){
         try{
