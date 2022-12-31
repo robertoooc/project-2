@@ -8,7 +8,6 @@ const bcrypt = require('bcrypt')
 const axios = require('axios')
 const API_KEY =process.env.API_KEY
 const OTHER_KEY =process.env.OTHER_KEY
-const baseURL ='https://api.musixmatch.com/ws/1.1/'
 // mount our routes on the router
 
 // GET /users/new -- serves a form to create a new user
@@ -126,7 +125,7 @@ router.get('/profile', async function (req, res) {
                     //==READS LIST OF SONGS FROM SEARCH==\\
  router.get('/songs', async function(req,res){
     try{
-        const response = await axios.get(`https://api.musixmatch.com/ws/1.1/track.search?q_track=${req.query.search}&s_track_rating=desc&apikey=${API_KEY}`)
+        const response = await axios.get(`https://api.musixmatch.com/ws/1.1/track.search?q_track=${req.query.search}&s_track_rating=desc&f_has_lyrics=1&apikey=${API_KEY}`)
 
         res.render('search.ejs',{
             search: response.data.message.body.track_list,
@@ -139,7 +138,7 @@ router.get('/profile', async function (req, res) {
                      //==READS SPECIFIC SONG==\\
  router.get('/songs/:id', async function(req,res){
     try{
-        const response = await axios.get(`https://api.musixmatch.com/ws/1.1/track.get?commontrack_id=${req.params.id}&apikey=${API_KEY}`)
+        const response = await axios.get(`https://api.musixmatch.com/ws/1.1/track.get?commontrack_id=${req.params.id}&f_has_lyrics=1&apikey=${API_KEY}`)
         let lyrics
         if(response.data.message.body.track.has_lyrics == '1'){
              lyrics = await axios.get(`https://api.musixmatch.com/ws/1.1/track.lyrics.get?commontrack_id=${req.params.id}&apikey=${API_KEY}`)
@@ -177,7 +176,7 @@ router.get('/profile', async function (req, res) {
  router.post('/songs/:id', async function(req,res){
     try{
      if(res.locals.user != null){
-        const response = await axios.get(`https://api.musixmatch.com/ws/1.1/track.get?commontrack_id=${req.params.id}&apikey=${API_KEY}`)
+        const response = await axios.get(`https://api.musixmatch.com/ws/1.1/track.get?commontrack_id=${req.params.id}&f_has_lyrics=1&apikey=${API_KEY}`)
         const lyrics = await axios.get(`https://api.musixmatch.com/ws/1.1/track.lyrics.get?commontrack_id=${req.params.id}&apikey=${API_KEY}`)
         const findPlaylist = await db.playlist.findOne({
             where:{

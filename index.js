@@ -5,7 +5,9 @@ const methodOverride = require('method-override')
 const cookieParser = require('cookie-parser')
 const db = require('./models')
 const crypto = require('crypto-js')
-
+const axios = require('axios')
+const API_KEY =process.env.API_KEY
+const OTHER_KEY =process.env.OTHER_KEY
 // app config
 const app = express()
 app.use(methodOverride('_method'))
@@ -56,11 +58,19 @@ app.use((req, res, next) => {
 })
 
 // routes and controllers
-app.get('/', (req, res) => {
-    console.log(res.locals.user)
-    res.render('home.ejs', {
-        user: res.locals.user
-    })
+app.get('/', async function(req, res) {
+    
+    try{
+        const search = await axios.get(`https://api.musixmatch.com/ws/1.1/chart.tracks.get?chart_name=mxmweekly&page=1&page_size=15&f_has_lyrics=1&apikey=${API_KEY}`)
+
+        console.log(res.locals.user)
+        res.render('home.ejs', {
+            user: res.locals.user,
+            popSongs: search.data.message.body.track_list
+        })
+    }catch(error){
+
+    }
 })
 
 app.use('/users', require('./controllers/users'))

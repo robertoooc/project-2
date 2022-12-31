@@ -1,5 +1,10 @@
 <%- include('partials/header.ejs',{user}) %> 
 
 <h2>Welcome Home, user</h2>
-
+<h1>
+    Popular songs:
+</h1>
+<% popSongs.forEach(function(search){ %>
+    <p><a href="/users/songs/<%=search.track.commontrack_id%>"><%= search.track.track_name %>, <%= search.track.artist_name%> </a></p>
+<%})%> 
 <%- include('partials/footer.ejs') %> 
