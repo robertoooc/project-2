@@ -32,38 +32,57 @@ router.get('/songs', async function(req,res){
                      //==READS SPECIFIC USERS PLAYLIST==\\
     router.get('/:id', async function(req,res){
         try{
-            
             const findPlaylist = await db.playlist.findOne({
                 where:{
                     id: parseInt(req.params.id)
                 }
             })
-            if(findPlaylist.status||findPlaylist.userId == res.locals.user.id){
-                const songs = await findPlaylist.getSongs()
-                let owner
-                findPlaylist.userId == res.locals.user.id ? owner = true: owner = false
-                res.render('playlistsongs.ejs',{
-                    playlist: findPlaylist,
-                    songs: songs,
-                    auth: owner
+            let view, owner
+            if(findPlaylist == null){
+                res.send('does not exist')
+            }else if(res.locals.user){
+            const songs = await findPlaylist.getSongs()
+            findPlaylist.status ? view = true: view = false
+            findPlaylist.userId == res.locals.user.id ? owner= true: owner=false
+            res.render('playlistsongs.ejs',{
+                playlist: findPlaylist,
+                songs: songs,
+                owner: owner,
+                view: view
                 })
-            }else{
-                // if(res.locals.user){
-                //     findPlaylist.userId == res.locals.user.id
-
-                // }else{
-                    res.send('you do not have permissio to veiw this playist')
-                //}
             }
-
-            // const findPlaylist = await db.playlist.findOne({
-            //     where:{
-            //       userId: parseInt(res.locals.user.id),
-            //       name: req.params.id
+            //else if(findPlaylist.status==true){
+            //     const songs = await findPlaylist.getSongs()
+            //     let owner
+            //     if(res.locals.user){
+            //         findPlaylist.userId == res.locals.user.id ? owner = true: owner = false
+            //     }else{
+            //         owner = false
             //     }
-            // })
+            //     res.render('playlistsongs.ejs',{
+            //         playlist: findPlaylist,
+            //         songs: songs,
+            //         auth: owner
+            //     })
+            // }else{
+            //     res.send(res.locals.user.id+ " "+ findPlaylist.userId + ' ' + findPlaylist.status)
+            //     if(res.locals.user){
+            //         if(res.locals.user.id == findPlaylist.userId){
+            //             const songs = await findPlaylist.getSongs()
+            //             const owner = true
+            //             res.render('playlistsongs.ejs',{
+            //                 playlist: findPlaylist,
+            //                 songs: songs,
+            //                 auth: owner
+            //             })
+            //         }
+            //         res.send('acess denied')
+            //      }else{
+            //         res.send('you do not have permissio to veiw this playist')
+            //     }
+            // }
         }catch(error){
-           // console.log(error)
+           console.log('🐙🐙🐙🐙🐙You messed up in the get /playlists/:id🐙🐙🐙🐙' + error) 
            res.send('You messed up in the get /playlists/:id' + error) 
         }
     })
