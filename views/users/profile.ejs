@@ -3,7 +3,9 @@
 <p>view your playlist here</p>
 
 <% playlists.forEach(function(playlist){ %>
-<p><%= playlist.name %> </p>
+    <% let status %> 
+    <% playlist.status== true ? status = 'public' : status = 'private' %> 
+<p><%= playlist.name %>, <%=status %> </p>
 <form method="GET" action='/playlists/<%=playlist.name%>'>
 <button type="submit">See the deets</button>
 </form>
@@ -13,6 +15,10 @@
 <form method="POST" action="/playlists">
     <label for="newPlaylist">Create a new playlist: </label>
     <input id='newPlaylist' type ='text' name='newPlaylist' required/>
+    <label for="public">public: </label>
+    <input id='public' value='public' type ='radio' name='status' required/>
+    <label for="private">private: </label>
+    <input id='private' value='private' type ='radio' name='status' required/>
     <button type="Submit">Submit</button>
 </form>
 

@@ -18,9 +18,6 @@ module.exports = {
       artist: {
         type: Sequelize.STRING
       },
-      lyrics: {
-        type: Sequelize.TEXT
-      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE

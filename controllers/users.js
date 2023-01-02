@@ -126,7 +126,6 @@ router.get('/profile', async function (req, res) {
  router.get('/songs', async function(req,res){
     try{
         const response = await axios.get(`https://api.musixmatch.com/ws/1.1/track.search?q_track=${req.query.search}&s_track_rating=desc&f_has_lyrics=1&apikey=${API_KEY}`)
-
         res.render('search.ejs',{
             search: response.data.message.body.track_list,
             name: req.query.search})
@@ -134,7 +133,37 @@ router.get('/profile', async function (req, res) {
        // console.log('You messed up in the /users/songs route')
         res.send('You messed up in the /users/songs route' + error)
     }
+ })
+ router.get('/artists', async function(req,res){
+    try{
+        const response = await axios.get(`https://api.musixmatch.com/ws/1.1/artist.search?q_artist=${req.query.search2}&page_size=15&apikey=${API_KEY}`)
+        res.render('artistsearch.ejs',{
+            search: response.data.message.body.artist_list,
+            name: req.query.search2
+        })
+    }catch(error){
+        res.send('You messed up in the /users/artists route' + error)
+    }
  }) 
+ router.get('/artists/:id', async function(req,res){
+    try{
+        const response = await axios.get(`https://api.musixmatch.com/ws/1.1/artist.albums.get?artist_id=${req.params.id}&page_size=100&s_album_rating=desc&g_album_name=1&apikey=${API_KEY}`)
+        res.send(response.data)
+        res.render('album.ejs',{
+            albums: response.data.message.body.album_list
+        })
+    }catch(error){
+        res.send('You messed up in the /users/artists/id route' + error)  
+    }
+ })
+router.get('/albums/:id', async function(req,res){
+    try{
+        const response = await axios.get(`https://api.musixmatch.com/ws/1.1/album.tracks.get?album_id=${req.params.id}&f_has_lyrics=1&page=1&page_size=25&apikey=${API_KEY}`)
+        res.send(response.data)  
+    }catch(error){
+        res.send('You messed up in the /users/albums/id route' + error)
+    }
+})
                      //==READS SPECIFIC SONG==\\
  router.get('/songs/:id', async function(req,res){
     try{
@@ -159,10 +188,8 @@ router.get('/profile', async function (req, res) {
         //str = str.toLowerCase()
         let check = `feat.`
         if(str.includes(check)){
-            //console.log(str.indexOf(check))
             let cutOff = str.indexOf(check) - 1
             str = str.slice(0,cutOff)
-            //console.log(str)
         }
         let alb = response.data.message.body.track.album_name
         alb = alb.toLowerCase()
@@ -171,25 +198,12 @@ router.get('/profile', async function (req, res) {
             let cutOfff = alb.indexOf(check2) - 1
             alb = alb.slice(0,cutOfff)
         }
-        // let src ={
-        //     img:'https://www.pbpusa.org/Shared/img/notfound.png'
-        // }
-        //console.log(alb + str)
             const img = await axios.get(`http://ws.audioscrobbler.com/2.0/?method=album.getinfo&api_key=${OTHER_KEY}&artist=${str}&album=${alb}&format=json`)
-            // if(img.data.error == 6){
-            //     console.log('erorror roo 🔄🔄🔄')
-            //     src = {
-            //         img:'https://www.pbpusa.org/Shared/img/notfound.png'
-            //     }
-            // }else{
             let src = img.data.album.image[4]
                 src['img'] =src['#text']
                 if(src.img == ''){
-                        src.img='https://www.pbpusa.org/Shared/img/notfound.png'
+                src.img='https://www.pbpusa.org/Shared/img/notfound.png'
                 }
-            
-
-        //onsole.log(str+response.data.message.body.track.album_name)
         res.render('searchSpecific.ejs',{
             song: response.data.message.body.track,    
             lyrics:lyrics,
@@ -206,7 +220,6 @@ router.get('/profile', async function (req, res) {
     try{
      if(res.locals.user != null){
         const response = await axios.get(`https://api.musixmatch.com/ws/1.1/track.get?commontrack_id=${req.params.id}&f_has_lyrics=1&apikey=${API_KEY}`)
-        const lyrics = await axios.get(`https://api.musixmatch.com/ws/1.1/track.lyrics.get?commontrack_id=${req.params.id}&apikey=${API_KEY}`)
         const findPlaylist = await db.playlist.findOne({
             where:{
                 userId: res.locals.user.id,
@@ -217,8 +230,7 @@ router.get('/profile', async function (req, res) {
             where:{
                 track: parseInt(req.params.id),
                 name: response.data.message.body.track.track_name,
-                artist: response.data.message.body.track.artist_name,
-                lyrics: lyrics.data.message.body.lyrics.lyrics_body,
+                artist: response.data.message.body.track.artist_name
             }    
         })
         await findPlaylist.addSong(findSong)

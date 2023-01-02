@@ -51,19 +51,22 @@ router.get('/songs', async function(req,res){
                         //====CREATES A USERS PLAYLIST====\\
     router.post('/', async function(req,res){
         try{
-            //const findUser = await db.user.findByPk(res.locals.user.id)
+            let public 
+            req.body.status=='public'? public = true: public =false
             const findPlaylist = await db.playlist.findOne({
                 where:{
                     userId: res.locals.user.id,
                     name: req.body.newPlaylist
                 }
             })
+            //res.send(findPlaylist.status)
             if(findPlaylist){
                 res.send('you already have a playlist with that name')
             }else{
                 const createPlaylist = await db.playlist.create({
                     userId: res.locals.user.id,
-                    name:req.body.newPlaylist
+                    name:req.body.newPlaylist,
+                    status: public
                 })
                 res.redirect('/users/profile')
             }
