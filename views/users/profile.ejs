@@ -6,7 +6,7 @@
     <% let status %> 
     <% playlist.status== true ? status = 'public' : status = 'private' %> 
 <p><%= playlist.name %>, <%=status %> </p>
-<form method="GET" action='/playlists/<%=playlist.name%>'>
+<form method="GET" action='/playlists/<%=playlist.id%>'>
 <button type="submit">See the deets</button>
 </form>
 

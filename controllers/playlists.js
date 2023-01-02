@@ -32,17 +32,36 @@ router.get('/songs', async function(req,res){
                      //==READS SPECIFIC USERS PLAYLIST==\\
     router.get('/:id', async function(req,res){
         try{
+            
             const findPlaylist = await db.playlist.findOne({
                 where:{
-                  userId: parseInt(res.locals.user.id),
-                  name: req.params.id
+                    id: parseInt(req.params.id)
                 }
             })
-            const songs = await findPlaylist.getSongs()
-            res.render('playlistsongs.ejs',{
-                playlist: findPlaylist,
-                songs: songs
-            })
+            if(findPlaylist.status||findPlaylist.userId == res.locals.user.id){
+                const songs = await findPlaylist.getSongs()
+                let owner
+                findPlaylist.userId == res.locals.user.id ? owner = true: owner = false
+                res.render('playlistsongs.ejs',{
+                    playlist: findPlaylist,
+                    songs: songs,
+                    auth: owner
+                })
+            }else{
+                // if(res.locals.user){
+                //     findPlaylist.userId == res.locals.user.id
+
+                // }else{
+                    res.send('you do not have permissio to veiw this playist')
+                //}
+            }
+
+            // const findPlaylist = await db.playlist.findOne({
+            //     where:{
+            //       userId: parseInt(res.locals.user.id),
+            //       name: req.params.id
+            //     }
+            // })
         }catch(error){
            // console.log(error)
            res.send('You messed up in the get /playlists/:id' + error) 
