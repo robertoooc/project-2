@@ -6,6 +6,7 @@ const router = express.Router()
 const crypto = require('crypto-js')
 const bcrypt = require('bcrypt')
 const axios = require('axios')
+const Sequelize = require("sequelize");
 const API_KEY =process.env.API_KEY
 const OTHER_KEY =process.env.OTHER_KEY
 // mount our routes on the router
@@ -132,6 +133,22 @@ router.get('/profile', async function (req, res) {
     }catch(error){
        // console.log('You messed up in the /users/songs route')
         res.send('You messed up in the /users/songs route' + error)
+    }
+ })
+ router.get('/playlists', async function(req,res){
+    try{
+        const Op = Sequelize.Op;
+        const findOtherPlaylists = await db.playlist.findAll({
+            where:{
+                name:{[Op.iLike]: `%${req.query.searchplaylists}%`},
+                status: true
+            }
+        })
+        res.render('otherplaylist.ejs',{
+            playlists: findOtherPlaylists
+        })
+    }catch(error){
+        res.send('You messed up in the get /users/playlists route' + error)  
     }
  })
  router.get('/artists', async function(req,res){

@@ -1,0 +1,6 @@
+<% playlists.forEach(function(playlist){%>
+<p><%= playlist.name %></p>
+<form method="GET" action='/playlists/<%=playlist.id%>'>
+    <button type="submit">See the deets</button>
+    </form>
+<%}) %> 
