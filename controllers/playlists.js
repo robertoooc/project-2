@@ -115,23 +115,31 @@ router.get('/songs', async function(req,res){
                        //====RENAMES A USERS PLAYLIST====\\
     router.put('/', async function(req,res){
         try{
-            const findName = await db.playlist.findOne({
-                where:{
-                    userId: res.locals.user.id,
-                    name: req.body.newName
-                }
-            })
+            let name = req.body.newName
+            let public 
+            req.body.status=='public'? public = true: public =false
             const findPlaylist = await db.playlist.findOne({
                 where:{
                     userId: res.locals.user.id,
                     name: req.body.playlist
                 }
             }) 
-            if(!findName){
-                await findPlaylist.update({name: req.body.newName})
-                res.redirect('/users/profile')
+            if(name){
+                const findName = await db.playlist.findOne({
+                    where:{
+                        userId: res.locals.user.id,
+                        name: req.body.newName
+                    }
+                })
+                if(!findName){
+                    await findPlaylist.update({name: req.body.newName, status: public})
+                    res.redirect('/users/profile')
+                }else{
+                    res.send('nooo')
+                }
             }else{
-                res.send('nooo')
+                await findPlaylist.update({status: public})
+                res.redirect('/users/profile')
             }
         }catch(error){
             res.send('you messed up in the put /playlist '+error)   
@@ -146,6 +154,7 @@ router.get('/songs', async function(req,res){
                     name: req.body.deletePlaylist
                 }
             })
+            
             res.redirect('/users/profile')
         }catch(error){
             res.send('you messed up in the delete /playlists ' +error)

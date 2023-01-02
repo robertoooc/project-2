@@ -22,17 +22,10 @@
     <button type="Submit">Submit</button>
 </form>
 
-<form method ='POST' action="/playlists/?_method=PUT">
-    <label for="playlist">Rename a playlist:</label>
-    <select name="playlist" id="playlist">
-        <% playlists.forEach(function(playlist){ %> 
-            <option value="<%=playlist.name%>"><%=playlist.name%> </option>
-            <% }) %> 
-    </select>
-    <label for="newName">New name:</label>
-    <input id="newName" type="text" name ='newName' required/>
-    <button type="submit">Add to playlist</button>
+<form method="GET" action="/playlists/songs">
+    <button type="submit">See list of all your songs</button>
 </form>
+
 <form method ='POST' action="/playlists/?_method=DELETE">
     <label for="deletePlaylist">Delete a playlist:</label>
     <select name="deletePlaylist" id="deletePlaylist">
