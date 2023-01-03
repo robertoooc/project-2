@@ -104,7 +104,8 @@ router.get('/songs', async function(req,res){
                 const createPlaylist = await db.playlist.create({
                     userId: res.locals.user.id,
                     name:req.body.newPlaylist,
-                    status: public
+                    status: public,
+                    likes: 0
                 })
                 res.redirect('/users/profile')
             }
@@ -112,34 +113,59 @@ router.get('/songs', async function(req,res){
             res.send('you messed up in the post /playlist '+error)
         }
     })
+    router.post('/comments', async function(req,res){
+        try{
+            if(res.locals.user){
+                const findPlaylist = await db.playlist.findOne({
+                    where:{
+                      userId:req.body.playlistId  
+                    }
+                })
+                const createComment = await db.activity.create({
+                    userId: res.locals.user.id,
+                    playlistId: findPlaylist.id,
+                    comment: req.body.comment
+                })
+                res.send(createComment)
+            }else{
+                res.send('no can do')
+            }
+        }catch(error){
+            res.send('you messed up in the post /playlist/actions '+error) 
+        }
+    })
                        //====RENAMES A USERS PLAYLIST====\\
     router.put('/', async function(req,res){
         try{
-            let name = req.body.newName
-            let public 
-            req.body.status=='public'? public = true: public =false
-            const findPlaylist = await db.playlist.findOne({
-                where:{
-                    userId: res.locals.user.id,
-                    name: req.body.playlist
-                }
-            }) 
-            if(name){
-                const findName = await db.playlist.findOne({
+            if(req.body.like){
+                res.send('clicked')
+            }else{
+                let name = req.body.newName
+                let public 
+                req.body.status=='public'? public = true: public =false
+                const findPlaylist = await db.playlist.findOne({
                     where:{
                         userId: res.locals.user.id,
-                        name: req.body.newName
+                        name: req.body.playlist
                     }
-                })
-                if(!findName){
-                    await findPlaylist.update({name: req.body.newName, status: public})
-                    res.redirect('/users/profile')
+                }) 
+                if(name){
+                    const findName = await db.playlist.findOne({
+                        where:{
+                            userId: res.locals.user.id,
+                            name: req.body.newName
+                        }
+                    })
+                    if(!findName){
+                        await findPlaylist.update({name: req.body.newName, status: public})
+                        res.redirect('/users/profile')
+                    }else{
+                        res.send('nooo')
+                    }
                 }else{
-                    res.send('nooo')
+                    await findPlaylist.update({status: public})
+                    res.redirect('/users/profile')
                 }
-            }else{
-                await findPlaylist.update({status: public})
-                res.redirect('/users/profile')
             }
         }catch(error){
             res.send('you messed up in the put /playlist '+error)   

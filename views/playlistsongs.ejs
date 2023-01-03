@@ -18,6 +18,14 @@
             </form>
             <button type="button" onclick="closeForm()" id ="closeButton" >Close</button>
         </div>
+    <% }else {%> 
+        <form method="POST" action="/playlists/comments">
+            <input name="playlistId" type="hidden" value="<%=playlist.id%>">
+            <p><label for="comment">Add a comment:</label></p>
+            <textarea id="comment" name="comment"></textarea>
+            <button name="like" type="submit" value="<%=playlist.id%>">Like</button>
+            <!-- <button></button> -->
+        </form>
     <% } %>   
     <h2>You will see the list of songs inside of <%=playlist.name%> playlist</h2>
     <%songs.forEach(function(song){  %> 
