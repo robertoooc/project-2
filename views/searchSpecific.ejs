@@ -1,7 +1,7 @@
 <%- include('partials/header.ejs',{user}) %> 
 <h1>Specific details of song: <%=song.track_name%></h1>
-
-<h2>By: <%=song.artist_name%></h2>
+<a>By: <%=song.artist_name%></a>
+<h2><a href="/search/artists/<%=song.artist_id%>">By: <%=song.artist_name%></a></h2>
 <img alt="<%=song.track_name%>" src="<%=img.img%>"/>
 <% if(playlists) {%> 
 <form method ='POST' action="/users/songs/<%=song.commontrack_id%> ">

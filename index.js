@@ -75,6 +75,7 @@ app.get('/', async function(req, res) {
 
 app.use('/users', require('./controllers/users'))
 app.use('/playlists', require('./controllers/playlists'))
+app.use('/search', require('./controllers/search'))
 
 // listen on a port
 app.listen(PORT, () => {

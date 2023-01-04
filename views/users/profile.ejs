@@ -26,13 +26,19 @@
     <button type="submit">See list of all your songs</button>
 </form>
 
-<form method ='POST' action="/playlists/?_method=DELETE">
-    <label for="deletePlaylist">Delete a playlist:</label>
-    <select name="deletePlaylist" id="deletePlaylist">
-        <% playlists.forEach(function(playlist){ %> 
-            <option value="<%=playlist.name%>"><%=playlist.name%> </option>
-            <% }) %> 
-    </select>
-    <button type="submit">Remove</button>
+<form method="GET" action="/users/actions">
+    <button type="submit">See list likes and comments</button>
 </form>
+
+<% if(playlists.length>0){%>
+    <form method ='POST' action="/playlists/?_method=DELETE">
+        <label for="deletePlaylist">Delete a playlist:</label>
+        <select name="deletePlaylist" id="deletePlaylist">
+            <% playlists.forEach(function(playlist){ %> 
+                <option value="<%=playlist.name%>"><%=playlist.name%> </option>
+                <% }) %> 
+        </select>
+        <button type="submit">Remove</button>
+    </form>
+<%} %> 
 <%- include('../partials/footer') %>
