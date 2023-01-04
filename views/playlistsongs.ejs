@@ -42,10 +42,26 @@
        <% } %>  
     <% } %>
     <p>Num of Likes : <%=likes%> </p>
+    <% if(userComments.length >0){ %>
+        <p>Your comments</p>
+        <% userComments.forEach(function(comment){%>
+            <p><%=comment.comment%> </p>
+        <% })%>
+    <%} %> 
     <p>comments: </p>   
     <% comments.forEach(function(comment){%> 
         <p><%=comment.comment%> </p>
-     <%}) %>    
+        <form method="POST" action="/playlists/comments?_method=DELETE">
+            <input name="commentId" type="hidden" value="<%=comment.id%>">
+            <input name="playlistId" type="hidden" value="<%=playlist.id%>">
+            <button type="submit">Delete Comment</button>
+        </form>
+        <form method="POST" action="/playlists/comments?_method=PUT">
+            <input name="commentId" type="hidden" value="<%=comment.id%>">
+            <button type="submit">Edit Comment</button>
+        </form>
+     <%}) %>
+     <br>    
     <h2>You will see the list of songs inside of <%=playlist.name%> playlist</h2>
     <%songs.forEach(function(song){  %> 
         <p><a href="/search/songs/<%=song.track%>"><%= song.name %></a></p>

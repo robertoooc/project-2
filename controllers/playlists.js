@@ -60,12 +60,9 @@ router.get('/songs', async function(req,res){
                        like: true 
                     }
                 })
-                if(userLike != null){
-                    userLike = true
-                }
-                else{
-                    userLike = false
-                }
+                userComments = findComments.filter(comment => comment.userId == res.locals.user.id)
+                userLike != null ? userLike = true: userLike = false
+
                 findPlaylist.userId == res.locals.user.id ? owner= true: owner=false
             }else{
                 owner = false
@@ -77,7 +74,8 @@ router.get('/songs', async function(req,res){
                 view: view,
                 likes: likeCount,
                 comments: findComments,
-                userLike: userLike
+                userLike: userLike,
+                userComments: userComments
                 })
             }
         }catch(error){
@@ -130,7 +128,19 @@ router.get('/songs', async function(req,res){
                 res.send('no can do')
             }
         }catch(error){
-            res.send('you messed up in the post /playlist/actions '+error) 
+            res.send('you messed up in the post /playlist/comments '+error) 
+        }
+    })
+    router.delete('/comments', async function(req,res){
+        try{
+            const findComment = await db.activity.destroy({
+                    where:{
+                        id:req.body.commentId
+                    }
+                })
+                res.redirect(`/playlists/${req.body.playlistId}`)
+        }catch(error){
+            res.send('You messed up in the delete /playlist/comments'+ error)
         }
     })
     router.post('/likes', async function(req,res){
