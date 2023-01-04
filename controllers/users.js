@@ -37,6 +37,7 @@ router.post('/', async function (req, res) {
             const hashedPassword = bcrypt.hashSync(req.body.password, 12)
             // save the user with the new password
             newUser.password = hashedPassword
+            newUser.name = req.body.name
             await newUser.save() // actually save the new password in th db
             // ecrypt the new user's id and convert it to a string
             const encryptedId = crypto.AES.encrypt(String(newUser.id), process.env.SECRET)
@@ -121,6 +122,43 @@ router.get('/profile', async function (req, res) {
         }
     }catch(error){
         res.send('you messed up in get /users/profile'+ error)
+    }
+})
+router.get('/likes', async function(req,res){
+    try{
+        //let findLikes, findComments
+
+        if(res.locals.user){
+            const findAll = await db.activity.findAll({
+                where:{
+                   userId: res.locals.user.id
+                }
+            })
+            let findLikes = findAll.filter(activity => activity.like == true)
+            let findComments = findAll.filter(activity => activity.comment != null)
+            let findPlaylist
+            if(findLikes.length >0){
+                for(let i in findLikes){
+                    findPlaylist = await db.playlist.findByPk(findLikes[i].playlistId)
+                    if(findPlaylist.status != true){
+                        findLikes.splice(i,i) 
+                    }
+                }
+            }
+            if(findComments.length >0){
+                for(let i in findComments){
+                    findPlaylist = await db.playlist.findByPk(findComments[i].playlistId)
+                    if(findPlaylist.status != true){
+                        findComments.splice(i,i) 
+                    }
+                }
+            }
+                res.send(findComments)  
+        }
+        //res.send(userLikes)
+    //res.send(findLikes)
+    }catch(error){
+        res.send('you messed up in get /users/likes'+ error)
     }
 })
                     //==READS LIST OF SONGS FROM SEARCH==\\

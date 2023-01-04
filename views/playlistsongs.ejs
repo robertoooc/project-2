@@ -18,15 +18,26 @@
             </form>
             <button type="button" onclick="closeForm()" id ="closeButton" >Close</button>
         </div>
-    <% }else {%> 
-        <form method="POST" action="/playlists/comments">
-            <input name="playlistId" type="hidden" value="<%=playlist.id%>">
-            <p><label for="comment">Add a comment:</label></p>
-            <textarea id="comment" name="comment"></textarea>
-            <button name="like" type="submit" value="<%=playlist.id%>">Like</button>
-            <!-- <button></button> -->
-        </form>
-    <% } %>   
+    <% }else {%>
+        <% if(user){%> 
+            <form method="POST" action="/playlists/comments">
+                <input name="playlistId" type="hidden" value="<%=playlist.id%>">
+                <p><label for="comment">Add a comment:</label></p>
+                <textarea id="comment" name="comment" required></textarea><br>
+                <button type="submit">Comment</button>
+            </form>
+            <br>
+            <form method="POST" action="/playlists/likes">
+                <input name="playlistId" type="hidden" value="<%=playlist.id%>">
+                <button type="submit">Like</button>
+            </form>
+       <% } %>  
+    <% } %>
+    <p>Num of Likes : <%=likes%> </p>
+    <p>comments: </p>   
+    <% comments.forEach(function(comment){%> 
+        <p><%=comment.comment%> </p>
+     <%}) %>    
     <h2>You will see the list of songs inside of <%=playlist.name%> playlist</h2>
     <%songs.forEach(function(song){  %> 
         <p><a href="/users/songs/<%=song.track%>"><%= song.name %></a></p>

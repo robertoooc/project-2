@@ -37,50 +37,36 @@ router.get('/songs', async function(req,res){
                     id: parseInt(req.params.id)
                 }
             })
-            let view, owner
+            const findAll = await db.activity.findAll({
+                where:{
+                   playlistId: findPlaylist.id
+                }
+            })
+            let findLikes,likeCount,findComments
+                findLikes = findAll.filter(activity => activity.like == true)
+                likeCount = findLikes.length
+                findComments = findAll.filter(activity => activity.comment != null)
+            let view, owner, user
             if(findPlaylist == null){
                 res.send('does not exist')
-            }else if(res.locals.user){
-            const songs = await findPlaylist.getSongs()
-            findPlaylist.status ? view = true: view = false
-            findPlaylist.userId == res.locals.user.id ? owner= true: owner=false
+            }else{
+                const songs = await findPlaylist.getSongs()
+                findPlaylist.status ? view = true: view = false
+                if(res.locals.user){
+                    user = true
+                findPlaylist.userId == res.locals.user.id ? owner= true: owner=false
+            }else{
+                owner = false
+            }
             res.render('playlistsongs.ejs',{
                 playlist: findPlaylist,
                 songs: songs,
                 owner: owner,
-                view: view
+                view: view,
+                likes: likeCount,
+                comments: findComments
                 })
             }
-            //else if(findPlaylist.status==true){
-            //     const songs = await findPlaylist.getSongs()
-            //     let owner
-            //     if(res.locals.user){
-            //         findPlaylist.userId == res.locals.user.id ? owner = true: owner = false
-            //     }else{
-            //         owner = false
-            //     }
-            //     res.render('playlistsongs.ejs',{
-            //         playlist: findPlaylist,
-            //         songs: songs,
-            //         auth: owner
-            //     })
-            // }else{
-            //     res.send(res.locals.user.id+ " "+ findPlaylist.userId + ' ' + findPlaylist.status)
-            //     if(res.locals.user){
-            //         if(res.locals.user.id == findPlaylist.userId){
-            //             const songs = await findPlaylist.getSongs()
-            //             const owner = true
-            //             res.render('playlistsongs.ejs',{
-            //                 playlist: findPlaylist,
-            //                 songs: songs,
-            //                 auth: owner
-            //             })
-            //         }
-            //         res.send('acess denied')
-            //      }else{
-            //         res.send('you do not have permissio to veiw this playist')
-            //     }
-            // }
         }catch(error){
            console.log('🐙🐙🐙🐙🐙You messed up in the get /playlists/:id🐙🐙🐙🐙' + error) 
            res.send('You messed up in the get /playlists/:id' + error) 
@@ -126,7 +112,49 @@ router.get('/songs', async function(req,res){
                     playlistId: findPlaylist.id,
                     comment: req.body.comment
                 })
-                res.send(createComment)
+                res.redirect(`/playlists/${findPlaylist.id}`)
+            }else{
+                res.send('no can do')
+            }
+        }catch(error){
+            res.send('you messed up in the post /playlist/actions '+error) 
+        }
+    })
+    router.post('/likes', async function(req,res){
+        try{
+            if(res.locals.user){
+                const findPlaylist = await db.playlist.findOne({
+                    where:{
+                      userId:req.body.playlistId  
+                    }
+                })
+                const [addLike,created] = await db.activity.findOrCreate({
+                    where:{
+                        userId: res.locals.user.id,
+                        playlistId: findPlaylist.id,
+                        like: true
+                    }
+                })
+                // const findAllLikes = await db.activity.findAll({
+                //     where:{
+                //        playlistId: findPlaylist.id,
+                //        like: true
+                //     }
+                // })
+                const findAll = await db.activity.findAll({
+                    where:{
+                       playlistId: findPlaylist.id
+                    }
+                })
+                const findLikes = findAll.filter(activity => activity.like == true)
+                const findComments = findAll.filter(activity => activity.comment != null)
+                const amount = await db.activity.count({
+                    where:{
+                       playlistId: findPlaylist.id,
+                       like: true                        
+                    }
+                })
+                res.redirect(`/playlists/${findPlaylist.id}`)
             }else{
                 res.send('no can do')
             }
