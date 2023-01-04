@@ -58,6 +58,8 @@
         </form>
         <form method="POST" action="/playlists/comments?_method=PUT">
             <input name="commentId" type="hidden" value="<%=comment.id%>">
+            <input name="playlistId" type="hidden" value="<%=playlist.id%>">
+            <textarea id="updatedComment" name="updatedComment" required></textarea>
             <button type="submit">Edit Comment</button>
         </form>
      <%}) %>

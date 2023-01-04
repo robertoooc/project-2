@@ -131,6 +131,15 @@ router.get('/songs', async function(req,res){
             res.send('you messed up in the post /playlist/comments '+error) 
         }
     })
+    router.put('/comments', async function(req,res){
+        try{
+            const findComment = await db.activity.findByPk(req.body.commentId)
+            await findComment.update({comment:`${req.body.updatedComment}`})
+            res.redirect(`/playlists/${req.body.playlistId}`)
+        }catch(error){
+            res.send('you messed up in the put /playlists/comments '+ error)
+        }
+    })
     router.delete('/comments', async function(req,res){
         try{
             const findComment = await db.activity.destroy({
