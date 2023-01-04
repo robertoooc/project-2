@@ -19,7 +19,19 @@
             <button type="button" onclick="closeForm()" id ="closeButton" >Close</button>
         </div>
     <% }else {%>
-        <% if(user){%> 
+        <% if(user){%>
+            <% if(userLike){ %>
+                <p>You have this liked </p>  
+                <form method="POST" action="/playlists/likes?_method=DELETE">
+                    <input name="playlistId" type="hidden" value="<%=playlist.id%>">
+                    <button type="submit">Remove Like</button>
+                </form>
+                <% }else{%>                 
+                    <form method="POST" action="/playlists/likes">
+                        <input name="playlistId" type="hidden" value="<%=playlist.id%>">
+                        <button type="submit">Like</button>
+                    </form>
+                    <%} %> 
             <form method="POST" action="/playlists/comments">
                 <input name="playlistId" type="hidden" value="<%=playlist.id%>">
                 <p><label for="comment">Add a comment:</label></p>
@@ -27,10 +39,6 @@
                 <button type="submit">Comment</button>
             </form>
             <br>
-            <form method="POST" action="/playlists/likes">
-                <input name="playlistId" type="hidden" value="<%=playlist.id%>">
-                <button type="submit">Like</button>
-            </form>
        <% } %>  
     <% } %>
     <p>Num of Likes : <%=likes%> </p>
@@ -47,7 +55,7 @@
             </form>
             <%} %> 
             <%})%>
-            <% }else{ %>
+    <% }else{ %>
                 <p>you do n0t have permistion</p>
         <% } %> 
         <script>
@@ -58,7 +66,7 @@
             }
             function closeForm(){
                 document.getElementById('form').style.display='none'
-                document.getElementById('openButton').style.display =''
+                document.getElementById('openButton').style.display ='block'
             }
         </script> 
     <%- include('partials/footer.ejs') %> 

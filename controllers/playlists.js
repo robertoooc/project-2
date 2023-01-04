@@ -46,14 +46,26 @@ router.get('/songs', async function(req,res){
                 findLikes = findAll.filter(activity => activity.like == true)
                 likeCount = findLikes.length
                 findComments = findAll.filter(activity => activity.comment != null)
-            let view, owner, user
+            let view, owner, userLike, userComments
             if(findPlaylist == null){
                 res.send('does not exist')
             }else{
                 const songs = await findPlaylist.getSongs()
                 findPlaylist.status ? view = true: view = false
                 if(res.locals.user){
-                    user = true
+                userLike = await db.activity.findOne({
+                    where:{
+                       playlistId: findPlaylist.id,
+                       userId: res.locals.user.id,
+                       like: true 
+                    }
+                })
+                if(userLike != null){
+                    userLike = true
+                }
+                else{
+                    userLike = false
+                }
                 findPlaylist.userId == res.locals.user.id ? owner= true: owner=false
             }else{
                 owner = false
@@ -64,7 +76,8 @@ router.get('/songs', async function(req,res){
                 owner: owner,
                 view: view,
                 likes: likeCount,
-                comments: findComments
+                comments: findComments,
+                userLike: userLike
                 })
             }
         }catch(error){
@@ -135,12 +148,6 @@ router.get('/songs', async function(req,res){
                         like: true
                     }
                 })
-                // const findAllLikes = await db.activity.findAll({
-                //     where:{
-                //        playlistId: findPlaylist.id,
-                //        like: true
-                //     }
-                // })
                 const findAll = await db.activity.findAll({
                     where:{
                        playlistId: findPlaylist.id
@@ -160,6 +167,20 @@ router.get('/songs', async function(req,res){
             }
         }catch(error){
             res.send('you messed up in the post /playlist/actions '+error) 
+        }
+    })
+    router.delete('/likes', async function(req,res){
+        try{
+            const findLike = await db.activity.destroy({
+                where:{
+                    playlistId: req.body.playlistId,
+                    userId: res.locals.user.id,
+                    like: true
+                }
+            })
+            res.redirect(`/playlists/${req.body.playlistId}`)
+        }catch(error){
+            res.send('you messed up in the delete /playlist/actions '+error)
         }
     })
                        //====RENAMES A USERS PLAYLIST====\\

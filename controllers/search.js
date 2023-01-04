@@ -63,7 +63,10 @@ router.get('/playlists', async function(req,res){
 router.get('/albums/:id', async function(req,res){
     try{
         const response = await axios.get(`https://api.musixmatch.com/ws/1.1/album.tracks.get?album_id=${req.params.id}&f_has_lyrics=1&page=1&page_size=25&apikey=${API_KEY}`)
-        res.send(response.data)  
+        
+        res.render('album.ejs',{
+            tracks:response.data.message.body.track_list
+        })  
     }catch(error){
         res.send('You messed up in the /users/albums/id route' + error)
     }
