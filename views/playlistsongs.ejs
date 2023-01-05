@@ -42,7 +42,7 @@
        <% } %>  
     <% } %>
     <p>Num of Likes : <%=likes%> </p>
-    <% if(userComments.length >0){ %>
+    <% if(typeof userComments != undefined &&userComments.length >0){ %>
         <p>Your comments</p>
         <% userComments.forEach(function(comment){%>
             <p><%=comment.comment%> </p>

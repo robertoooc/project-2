@@ -17,7 +17,6 @@ app.set('view engine', 'ejs')
 app.use(express.urlencoded({ extended: false }))
 // tell express to parse incoming cookies
 app.use(cookieParser())
-
 // custom auth middleware that checks the cookies for a user id
 // and it finds one, look up the user in the db
 // tell all downstream routes about this user
@@ -35,7 +34,7 @@ app.use(async (req, res, next) => {
             // set the logged in user to be null for conditional rendering
             res.locals.user = null
         }
-
+        
         // move on the the next middleware/route
         next()
     } catch (err) {
@@ -58,24 +57,26 @@ app.use((req, res, next) => {
 })
 
 // routes and controllers
-app.get('/', async function(req, res) {
-    
+app.get('/', async function(req, res) {    
     try{
-        const search = await axios.get(`https://api.musixmatch.com/ws/1.1/chart.tracks.get?chart_name=mxmweekly&page=1&page_size=15&f_has_lyrics=1&apikey=${API_KEY}`)
-
-        console.log(res.locals.user)
+        // const search = await axios.get(`https://api.musixmatch.com/ws/1.1/chart.tracks.get?chart_name=mxmweekly&page=1&page_size=15&f_has_lyrics=1&apikey=${API_KEY}`)
+        
+        
         res.render('home.ejs', {
-            user: res.locals.user,
-            popSongs: search.data.message.body.track_list
+            user: res.locals.user
+            //,popSongs: search.data.message.body.track_list
         })
-    }catch(error){
 
+    }catch(error){
+        res.send('error in main page'+error)
     }
 })
 
-app.use('/users', require('./controllers/users'))
-app.use('/playlists', require('./controllers/playlists'))
-app.use('/search', require('./controllers/search'))
+ app.use('/users', require('./controllers/users'))
+ app.use('/playlists', require('./controllers/playlists'))
+ app.use('/search', require('./controllers/search'))
+const path = require('path')
+app.use(express.static(path.join(__dirname, 'public')))
 
 // listen on a port
 app.listen(PORT, () => {

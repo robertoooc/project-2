@@ -4,43 +4,51 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel='stylesheet' href="/css/style.css"/>
     <title>Project 2</title>
-    <style>
-        #form{
-            display: none;
-        }
-    </style>
 </head>
 <body>
-    <nav>
+    <header>
+    <div>Music App</div>
+        <nav class="navBar">
         <ul>
             <!-- show home whether the user is logged in or not -->
-            <li><a href='/'>Home</a></li>
+            <li>     
+                <a href='/'>Home</a>
+            </li>
             <% if(user){ %>
                 <!-- show these if user is logged in -->
-                <li><a href='/users/profile'>Profile</a></li>
-                <li><a href='/users/logout'>Logout</a></li>
+                <li>
+                    <a href='/users/profile'>Profile</a>
+                </li>
+                <li>
+                    <a href='/users/logout'>Logout</a>
+                </li>
                 <% } else {%>
                 <!-- show these if user not logged in -->
-                <li><a href='/users/new'>Sign up</a></li>
-                <li><a href='/users/login'>Login</a></li>
+                <li>
+                    <a href='/users/new'>Signup</a>
+                </li>
+                <li>   
+                    <a href='/users/login'>Login</a>
+                </li>
                 <% } %> 
-
         </ul>
-        <form action="/search/songs">
-            <label for ='search'></label>
-            <input id = 'search' name="search" placeholder="search songs" required/>
-            <button type="submit">Search</button>
-        </form>
-        <form action="/search/artists">
-            <label for ='search2'></label>
-            <input id = 'search2' name="search2" placeholder="search artists" required/>
-            <button type="submit">Search</button>
-        </form>
-        <form action="/search/playlists">
-            <label for ='searchplaylists'></label>
-            <input id = 'searchplaylists' name="searchplaylists" placeholder="search other user playlists" required/>
-            <button type="submit">Search</button>
-        </form>
-    </nav>
-<h1>Express Auth Boilerplate for p2</h1>    
+        </nav>
+    </header>
+    
+    <form action="/search/songs">
+        <label for ='search'></label>
+        <input id = 'search' name="search" placeholder="search songs" required/>
+        <button type="submit">Search</button>
+    </form>
+    <form action="/search/artists">
+        <label for ='search2'></label>
+        <input id = 'search2' name="search2" placeholder="search artists" required/>
+        <button type="submit">Search</button>
+    </form>
+    <form action="/search/playlists">
+        <label for ='searchplaylists'></label>
+        <input id = 'searchplaylists' name="searchplaylists" placeholder="search other user playlists" required/>
+        <button type="submit">Search</button>
+    </form>
