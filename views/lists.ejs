@@ -1,22 +1,19 @@
 <%- include('partials/header.ejs',{user}) %> 
-<% if(typeof searchSongs != undefined){ %> 
+<% if(searchBy == 'songs'){ %> 
 <h1>
     List of searches:
 </h1>
 <% search.forEach(function(search){ %>
     <p><a href="/search/songs/<%=search.track.commontrack_id%>"><%= search.track.track_name %>, <%= search.track.artist_name%> </a></p>
 <%})%> 
-<% } %> 
-<% if(typeof artistSearch != undefined){ %> 
+<% } else if(searchBy == 'artists'){ %> 
 <h1>
     List of artists:
 </h1>
-<% search.forEach(function(search){ %>
+<% artistList.forEach(function(search){ %>
     <p><a href="/search/artists/<%=search.artist.artist_id%>"><%= search.artist.artist_name %>, <%= search.artist.artist_id%> </a></p>
 <%})%> 
-<% } %> 
-
-<% if(typeof userSongs != undefined){%>
+<% }else{%>
     <h1>
         List of all songs user has in playlists:
     </h1>

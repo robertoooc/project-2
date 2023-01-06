@@ -9,6 +9,7 @@
 </head>
 <body>
     <header>
+        <div class ='name'>NAME</div>
       <div class ='group'>
         <ul class ='nav'>
             <li><a href='/'>Home</a></li>
@@ -22,21 +23,23 @@
         </ul>
         <div class="searchBar">
             <span class="icons">
-                <ion-icon name="search-outline"></ion-icon>
-                <ion-icon name="close-outline"></ion-icon>  
+                <ion-icon id="searchBtn" name="search-outline"></ion-icon>
+                <ion-icon id="closeBtn" name="close-outline"></ion-icon>  
             </span>
         </div>
       </div>  
       <div class="searchBox">
         <form action="/search" method="GET">
-
-            <select name ='searchFor'>
-                <option  value="songs">Songs</option>
-                <option  value="artists">Artists</option>
-                <option  value="playlists">Playlists</option>
-            </select>
-            
-            <input type="text" name="searchBy" autocomplete="off" placeholder="search here... " required/>
+            <div>
+                <select id='selectSearch' name ='searchFor'>
+                    <option  value="songs">Songs</option>
+                    <option  value="artists">Artists</option>
+                    <option  value="playlists">Playlists</option>
+                </select>
+            </div>
+            <div>
+                <input type="text" name="searchBy" autocomplete="off" placeholder="search here... " required/>
+            </div>
         </form>
       </div>
     </header>

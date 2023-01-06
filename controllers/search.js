@@ -51,7 +51,7 @@ router.get('/songs', async function(req,res){
         res.render('lists.ejs',{
             search: response.data.message.body.track_list,
             name: req.query.search,
-            searchSongs: true
+            searchBy: 'songs'
         })
         }catch(error){
             // console.log('You messed up in the /users/songs route')
@@ -66,9 +66,9 @@ router.get('/songs', async function(req,res){
         }
         const response = await axios.get(`https://api.musixmatch.com/ws/1.1/artist.search?q_artist=${req.query.search2}&page_size=15&apikey=${API_KEY}`)
         res.render('lists.ejs',{
-            search: response.data.message.body.artist_list,
+            artistList: response.data.message.body.artist_list,
             name: req.query.search2,
-            artistSearch: true
+            searchBy: 'artists'
         })
     }catch(error){
         res.send('You messed up in the /users/artists route' + error)
