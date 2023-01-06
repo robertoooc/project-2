@@ -9,46 +9,62 @@
 </head>
 <body>
     <header>
+      <div class ='group'>
+        <ul class ='nav'>
+            <li><a href='/'>Home</a></li>
+            <%if(user){%>
+                <li><a href='/users/profile'>Profile</a></li>
+                <li><a href='/users/logout'>Logout</a></li>
+           <% } else{%>
+            <li><a href='/users/login'>Login</a></li>
+            <li><a href='/users/new'>Sign up</a></li>
+            <% } %> 
+        </ul>
+        <div class="searchBar">
+            <span class="icons">
+                <ion-icon name="search-outline"></ion-icon>
+                <ion-icon name="close-outline"></ion-icon>  
+            </span>
+        </div>
+      </div>  
+      <div class="searchBox">
+        <form action="/search" method="GET">
+
+            <select name ='searchFor'>
+                <option  value="songs">Songs</option>
+                <option  value="artists">Artists</option>
+                <option  value="playlists">Playlists</option>
+            </select>
+            
+            <input type="text" name="searchBy" autocomplete="off" placeholder="search here... " required/>
+        </form>
+      </div>
+    </header>
+    <!-- <header>
     <div>Music App</div>
         <nav class="navBar">
-        <ul>
+        <ul> -->
             <!-- show home whether the user is logged in or not -->
-            <li>     
+            <!-- <li>     
                 <a href='/'>Home</a>
             </li>
-            <% if(user){ %>
-                <!-- show these if user is logged in -->
+            <%// if(user){ %>
+                 show these if user is logged in 
                 <li>
                     <a href='/users/profile'>Profile</a>
                 </li>
                 <li>
                     <a href='/users/logout'>Logout</a>
                 </li>
-                <% } else {%>
-                <!-- show these if user not logged in -->
+                <%// } else {%>
+                 show these if user not logged in 
                 <li>
                     <a href='/users/new'>Signup</a>
                 </li>
                 <li>   
                     <a href='/users/login'>Login</a>
                 </li>
-                <% } %> 
+                <%// } %> 
         </ul>
         </nav>
-    </header>
-
-    <form action="/search/songs">
-        <label for ='search'></label>
-        <input id = 'search' name="search" autocomplete="off" placeholder="search songs" required/>
-        <button type="submit">Search</button>
-    </form>
-    <form action="/search/artists">
-        <label for ='search2'></label>
-        <input id = 'search2' name="search2" autocomplete="off" placeholder="search artists" required/>
-        <button type="submit">Search</button>
-    </form>
-    <form action="/search/playlists">
-        <label for ='searchplaylists'></label>
-        <input id = 'searchplaylists' autocomplete="off" name="searchplaylists" placeholder="search other user playlists" required/>
-        <button type="submit">Search</button>
-    </form>
+    </header> -->

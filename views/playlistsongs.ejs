@@ -42,9 +42,13 @@
             <br>
        <% } %>  
     <% } %>
-    <p>Num of Likes : <%=likes%> </p>
+    <p> <%=likes%> Like</p>
+    <p><%=comments.length%> Comments </p>
 
-        <% comments.forEach(function(comment){%>
+    <button type="button" onclick="openEditForm('commentSection','openComments')" id="openComments">Open Comments</button>
+<div class = 'hide' id="commentSection">
+    <% comments.forEach(function(comment){%>
+        <div>
             <p><%=comment.comment%> </p>
             <% if(user){%> 
                 <%if(comment.userId==user.id){%>
@@ -67,7 +71,10 @@
                     </div>
                 <%}  %> 
                 <% } %> 
-         <%}) %>  
+        </div>
+     <%}) %>  
+     <button type="button" onclick="closeEditForm('commentSection','openComments')">Close Comments</button>
+</div>
      <br>    
     <h2>You will see the list of songs inside of <%=playlist.name%> playlist</h2>
     <%songs.forEach(function(song){%>

@@ -6,12 +6,22 @@ const router = express.Router()
 const Sequelize = require("sequelize");
 const API_KEY =process.env.API_KEY
 const OTHER_KEY =process.env.OTHER_KEY
+
 router.get('/', async function(req,res){
 try{
-
+    let path
+if(req.query.searchFor == 'songs'){
+    path = 'songs?search='
+}else if(req.query.searchFor == 'artists'){
+    path = 'artists?search2='
+}else{
+    path = 'playlists?searchplaylists='
+}
+res.redirect(`/search/${path}${req.query.searchBy}`)
 }catch(error){
     res.send('messed up in the get /search  ' + error)
 }
+
 })
 router.get('/playlists', async function(req,res){
     try{

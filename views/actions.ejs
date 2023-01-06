@@ -1,6 +1,8 @@
+<%- include('partials/header.ejs',{user}) %>
 <% likes.forEach(function(playlist){ %>
 <p><a href="/playlists/<%=playlist.playlistId%> "><%= playlist.name %> Like</a></p>
 <% }) %> 
 <% comments.forEach(function(playlist){ %>
 <p><a href="/playlists/<%=playlist.playlistId%> "><%= playlist.name %> Comment</a></p>
 <% }) %> 
+<%- include('partials/footer.ejs') %> 
