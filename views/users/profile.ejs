@@ -11,7 +11,7 @@
 </form>
 
 <%})%>
-
+<ion-icon name="add-circle-outline"></ion-icon>
 <form method="POST" action="/playlists">
     <label for="newPlaylist">Create a new playlist: </label>
     <input id='newPlaylist' type ='text' name='newPlaylist' autocomplete="off" required/>
@@ -20,6 +20,7 @@
     <label for="private">private: </label>
     <input id='private' value='private' type ='radio' name='status' required/>
     <button type="Submit">Submit</button>
+    <ion-icon name="add-circle-outline"></ion-icon>
 </form>
 
 <form method="GET" action="/playlists/songs">
@@ -41,4 +42,7 @@
         <button type="submit">Remove</button>
     </form>
 <%} %> 
+<script>
+    
+</script>
 <%- include('../partials/footer') %>

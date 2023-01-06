@@ -1,19 +1,43 @@
+</div>
 <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
 <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
 <script>
+    function openEditForm(open,close){
+        document.getElementById(open).style.display ='block'
+        document.getElementById(close).style.display ='none'
+    }
+    function closeEditForm(close,open){
+        document.getElementById(close).style.display='none'
+        document.getElementById(open).style.display ='block'
+    }
+ 
     let searchBtn = document.getElementById('searchBtn')
     let closeBtn = document.getElementById('closeBtn')
     let searchBox = document.querySelector('.searchBox')
+    let header = document.querySelector('header')
+    let nav = document.querySelector('.nav')
+    let hamburgerMenu = document.querySelector('.hamburgerMenu')
+
+    hamburgerMenu.addEventListener('click', function(){
+        header.classList.toggle('open')
+        searchBox.classList.remove('active')
+        searchBtn.classList.remove('active')
+        closeBtn.classList.remove('active')
+    })
     searchBtn.addEventListener('click', function(){
         searchBox.classList.add('active')
         searchBtn.classList.add('active')
         closeBtn.classList.add('active')
+        hamburgerMenu.classList.add('hidden')
+        header.classList.remove('open')
     })
     closeBtn.addEventListener('click', function(){
         searchBox.classList.remove('active')
         searchBtn.classList.remove('active')
         closeBtn.classList.remove('active')
+        hamburgerMenu.classList.remove('hidden')
     })
+
 </script>
 </body>
 </html>

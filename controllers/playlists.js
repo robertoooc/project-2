@@ -20,7 +20,8 @@ router.get('/songs', async function(req,res){
     const iterator = newMap.values();
     const unique = [...iterator]
     
-    res.render('lists.ejs',{song: unique, userSongs: true})
+    res.render('lists.ejs',{song: unique, userSongs: true,
+    searchBy: 'userSongs'})
 }else{
     res.send('loggin first')
 }

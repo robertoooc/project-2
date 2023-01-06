@@ -27,9 +27,10 @@
                 <ion-icon id="closeBtn" name="close-outline"></ion-icon>  
             </span>
         </div>
+        <ion-icon class="hamburgerMenu" name="menu-outline"></ion-icon>
       </div>  
       <div class="searchBox">
-        <form action="/search" method="GET">
+        <form id ='searchForm' action="/search" method="GET">
             <div>
                 <select id='selectSearch' name ='searchFor'>
                     <option  value="songs">Songs</option>
@@ -43,31 +44,5 @@
         </form>
       </div>
     </header>
-    <!-- <header>
-    <div>Music App</div>
-        <nav class="navBar">
-        <ul> -->
-            <!-- show home whether the user is logged in or not -->
-            <!-- <li>     
-                <a href='/'>Home</a>
-            </li>
-            <%// if(user){ %>
-                 show these if user is logged in 
-                <li>
-                    <a href='/users/profile'>Profile</a>
-                </li>
-                <li>
-                    <a href='/users/logout'>Logout</a>
-                </li>
-                <%// } else {%>
-                 show these if user not logged in 
-                <li>
-                    <a href='/users/new'>Signup</a>
-                </li>
-                <li>   
-                    <a href='/users/login'>Login</a>
-                </li>
-                <%// } %> 
-        </ul>
-        </nav>
-    </header> -->
+    <div class ='content'>
+
