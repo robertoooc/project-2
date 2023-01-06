@@ -1,6 +1,10 @@
 <% playlists.forEach(function(playlist){%>
-<p><%= playlist.name %></p>
+<p><%= playlist.name %>, by: <%=playlist.user.name%> </p>
+<img alt="user avatar" src ='https://avatars.dicebear.com/api/bottts/<%=playlist.user.name%><%=playlist.user.id %>.png?size=40'>
 <form method="GET" action='/playlists/<%=playlist.id%>'>
     <button type="submit">See the deets</button>
     </form>
 <%}) %> 
+<% if(playlists.length ==0){ %> 
+    <p>Sorry no results for your search</p>
+    <% } %> 

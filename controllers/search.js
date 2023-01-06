@@ -15,13 +15,17 @@ try{
 })
 router.get('/playlists', async function(req,res){
     try{
-        const Op = Sequelize.Op;
-        const findOtherPlaylists = await db.playlist.findAll({
+        let Op = Sequelize.Op;
+        let findOtherPlaylists = await db.playlist.findAll({
             where:{
                 name:{[Op.iLike]: `%${req.query.searchplaylists}%`},
                 status: true
+            },
+            include: {
+                model: db.user
             }
         })
+        //res.send(findOtherPlaylists)
         res.render('otherplaylist.ejs',{
             playlists: findOtherPlaylists
         })

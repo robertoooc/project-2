@@ -1,8 +1,9 @@
+
 <%- include('partials/header.ejs',{user}) %>
 <% if(view||owner){ %>
     <% if(owner){ %>
-        <button type="button" onclick="openForm()" id ="openButton" >Edit</button>
-        <div id="form">
+        <button type="button" onclick="openEditForm('form', 'openButton')" id ="openButton" >Edit</button>
+        <div id="form" class ='hide'>
             <form method ='POST' action="/playlists/?_method=PUT">
                 <input name="playlist" type="hidden" value="<%=playlist.name%>">
                 <label for="newName">update name:</label>
@@ -16,7 +17,7 @@
             <form method="POST" action="/playlists/?_method=DELETE">
                 <button name="deletePlaylist" type="submit" value="<%=playlist.name%>">Delete</button>
             </form>
-            <button type="button" onclick="closeForm()" id ="closeButton" >Close</button>
+            <button type="button" onclick="closeEditForm('form','openButton')" id ="closeButton" >Close</button>
         </div>
     <% }else {%>
         <% if(user){%>
@@ -42,30 +43,34 @@
        <% } %>  
     <% } %>
     <p>Num of Likes : <%=likes%> </p>
-    <% if(typeof userComments != undefined &&userComments.length >0){ %>
-        <p>Your comments</p>
-        <% userComments.forEach(function(comment){%>
+
+        <% comments.forEach(function(comment){%>
             <p><%=comment.comment%> </p>
-        <% })%>
-    <%} %> 
-    <p>comments: </p>   
-    <% comments.forEach(function(comment){%> 
-        <p><%=comment.comment%> </p>
-        <form method="POST" action="/playlists/comments?_method=DELETE">
-            <input name="commentId" type="hidden" value="<%=comment.id%>">
-            <input name="playlistId" type="hidden" value="<%=playlist.id%>">
-            <button type="submit">Delete Comment</button>
-        </form>
-        <form method="POST" action="/playlists/comments?_method=PUT">
-            <input name="commentId" type="hidden" value="<%=comment.id%>">
-            <input name="playlistId" type="hidden" value="<%=playlist.id%>">
-            <textarea id="updatedComment" name="updatedComment" required></textarea>
-            <button type="submit">Edit Comment</button>
-        </form>
-     <%}) %>
+            <% if(user){%> 
+                <%if(comment.userId==user.id){%>
+                    <% let formId = `a${comment.id}`%> 
+                    <% let buttonId = `b${comment.id}`%>  
+                    <button type="button" onclick="openEditForm('<%=formId%>','<%=buttonId%>')" id ="<%=buttonId%>">⋮</button>
+                    <div class ='hide' id="<%=formId%>">
+                        <form method="POST" action="/playlists/comments?_method=DELETE">
+                            <input name="commentId" type="hidden" value="<%=comment.id%>">
+                            <input name="playlistId" type="hidden" value="<%=playlist.id%>">
+                            <button type="submit">Delete Comment</button>
+                        </form>
+                        <form method="POST" action="/playlists/comments?_method=PUT">
+                            <input name="commentId" type="hidden" value="<%=comment.id%>">
+                            <input name="playlistId" type="hidden" value="<%=playlist.id%>">
+                            <textarea id="updatedComment" name="updatedComment" required></textarea>
+                            <button type="submit">Edit Comment</button>
+                        </form>
+                        <button type="button" onclick="closeEditForm('<%=formId%>','<%=buttonId%>')">close</button>
+                    </div>
+                <%}  %> 
+                <% } %> 
+         <%}) %>  
      <br>    
     <h2>You will see the list of songs inside of <%=playlist.name%> playlist</h2>
-    <%songs.forEach(function(song){  %> 
+    <%songs.forEach(function(song){%>
         <p><a href="/search/songs/<%=song.track%>"><%= song.name %></a></p>
         <% if(owner){%>
             <form method='POST' action="/playlists/<%=playlist.name%>/songs/<%=song.track%>/?_method=DELETE">
@@ -77,14 +82,13 @@
                 <p>you do n0t have permistion</p>
         <% } %> 
         <script>
-            function openForm(){
-                document.getElementById('form').style.display ='block'
-                document.getElementById('openButton').style.display ='none'
-
+            function openEditForm(open,close){
+                document.getElementById(open).style.display ='block'
+                document.getElementById(close).style.display ='none'
             }
-            function closeForm(){
-                document.getElementById('form').style.display='none'
-                document.getElementById('openButton').style.display ='block'
+            function closeEditForm(close,open){
+                document.getElementById(close).style.display='none'
+                document.getElementById(open).style.display ='block'
             }
         </script> 
     <%- include('partials/footer.ejs') %> 
