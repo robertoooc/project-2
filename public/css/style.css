@@ -10,6 +10,8 @@ body {
   background-color: rgba(216, 178, 129, 0.453);
   min-height: 100vh;
   overflow-x: hidden;
+  display:flex;
+  flex-direction: column;
 }
 .name{
 text-decoration: none;
@@ -148,6 +150,7 @@ a, a:visited {
 .content{
   margin-top: 10%;
   margin-left: 5%;
+  flex-grow:1;
 }
 .icon{
   font-size: 2.4em;
@@ -182,7 +185,42 @@ a, a:visited {
   padding: 10px;
   height: 300px;
 }
-
+footer{
+  /* position: sticky;
+  bottom: 0; */
+  /* background-color: rgba(216, 178, 129, 0.453); */
+  height: 4%;
+  background-color: rgba(98, 63, 44, 0.848);
+  padding: 10px;
+}
+footer .icon{
+  font-size: 1.5em;
+}
+.socials{
+  text-align: center;
+  padding-bottom: 10px;
+}
+footer ul{
+  margin-top: 0;
+  padding: 0;
+  list-style: none;
+  font-size: 1em;
+  line-height: 1.15em;
+  margin-bottom: 0;
+  text-align: center;
+}
+footer ul li{
+  display: inline-block;
+  padding: 0 15px 15px 15px;
+}
+footer ul li a:hover{
+  color: red;
+}
+footer p {
+  text-align: center;
+  font-size: 0.75em;
+  color: rgb(17, 17, 17);
+}
 
 
 @media (max-width: 900px) {

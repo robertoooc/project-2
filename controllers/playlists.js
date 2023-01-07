@@ -19,7 +19,6 @@ router.get('/songs', async function(req,res){
     const newMap = new Map(newArr);
     const iterator = newMap.values();
     const unique = [...iterator]
-    
     res.render('lists.ejs',{song: unique, userSongs: true,
     searchBy: 'userSongs'})
 }else{
@@ -35,6 +34,9 @@ router.get('/:id', async function(req,res){
         const findPlaylist = await db.playlist.findOne({
             where:{
                 id: parseInt(req.params.id)
+                },
+                include:{
+                    model:db.user
                 }
             })
             const findAll = await db.activity.findAll({

@@ -1,8 +1,0 @@
-<%- include('partials/header.ejs',{user}) %> 
-<h1>
-    List of artists:
-</h1>
-<% search.forEach(function(search){ %>
-    <p><a href="/search/artists/<%=search.artist.artist_id%>"><%= search.artist.artist_name %>, <%= search.artist.artist_id%> </a></p>
-<%})%> 
-<%- include('partials/footer.ejs') %> 

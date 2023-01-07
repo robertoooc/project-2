@@ -81,8 +81,13 @@
      <%}) %>  
      <button type="button" onclick="closeEditForm('commentSection','openComments')">Close Comments</button>
 </div>
-     <br>    
-    <h2>You will see the list of songs inside of <%=playlist.name%> playlist</h2>
+     <br>
+     <h2>Playlist Name: <%=playlist.name%></h2>    
+        <h3>By: <%= playlist.user.name %> </h3>
+        <% if(songs.length == 0){%> 
+            <br>
+            <p>No songs in this playlist</p>
+        <%} %> 
     <%songs.forEach(function(song){%>
         <div class="column divider" onclick ="location.href='/search/songs/<%=song.track%>';"
         style="min-width:fit-content; width: 30%; min-height:fit-content; height: 40px; background-color: rgb(246, 245, 245);">
