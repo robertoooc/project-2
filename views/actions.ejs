@@ -1,8 +1,23 @@
 <%- include('partials/header.ejs',{user}) %>
-<% likes.forEach(function(playlist){ %>
-<p><a href="/playlists/<%=playlist.playlistId%> "><%= playlist.name %> Like</a></p>
-<% }) %> 
-<% comments.forEach(function(playlist){ %>
-<p><a href="/playlists/<%=playlist.playlistId%> "><%= playlist.name %> Comment</a></p>
-<% }) %> 
+<% let userName = (user.name).toUpperCase() %> 
+<h1><%=userName%>'s list of Likes and Comments</h1>
+<div class="parentContainer">
+    <div class="childContainer">
+        <p><%= likes.length %><ion-icon class ='icon' name="heart-outline"></ion-icon></p>
+        <% likes.forEach(function(playlist){ %>
+            <div class="column divider" onclick="location.href='/playlists/<%=playlist.playlistId%>';">
+                <p><strong>Playlist name:</strong><%=playlist.name %><br><strong>Action:</strong> Like</p>
+            </div>
+            <% }) %> 
+    </div>
+
+    <div class="childContainer">
+      <p><%=comments.length%><ion-icon class ='icon' name="chatbubble-ellipses-outline"></ion-icon></p>
+        <% comments.forEach(function(playlist){ %>
+        <div class="column divider" onclick="location.href='/playlists/<%=playlist.playlistId%>';">
+             <p><strong>Playlist name:</strong> <%= playlist.name %> <br><strong>Comment:</strong><%=playlist.comment%></p>
+        </div>
+     <% }) %> 
+  </div>  
+</div>
 <%- include('partials/footer.ejs') %> 

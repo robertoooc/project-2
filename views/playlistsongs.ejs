@@ -48,13 +48,18 @@
     <button type="button" onclick="openEditForm('commentSection','openComments')" id="openComments">Open Comments</button>
 <div class = 'hide' id="commentSection">
     <% comments.forEach(function(comment){%>
-        <div>
-            <p><%=comment.comment%> </p>
+
+        <div class="column divider">
+            <img class="avatar" alt="<%=comment.user.name%> avatar" src = 'https://avatars.dicebear.com/api/bottts/<%=comment.user.name%><%=comment.user.id %>.svg?size=35'>
+            <div class="alignLeft">
+                <h2><%=comment.user.name%> </h2>
+                <p><%=comment.comment%> </p>
+            </div>
             <% if(user){%> 
                 <%if(comment.userId==user.id){%>
                     <% let formId = `a${comment.id}`%> 
                     <% let buttonId = `b${comment.id}`%>  
-                    <button type="button" onclick="openEditForm('<%=formId%>','<%=buttonId%>')" id ="<%=buttonId%>">⋮</button>
+                    <ion-icon onclick="openEditForm('<%=formId%>','<%=buttonId%>')" id ="<%=buttonId%>" name="ellipsis-vertical-circle-outline"></ion-icon>
                     <div class ='hide' id="<%=formId%>">
                         <form method="POST" action="/playlists/comments?_method=DELETE">
                             <input name="commentId" type="hidden" value="<%=comment.id%>">
@@ -67,7 +72,8 @@
                             <textarea id="updatedComment" name="updatedComment" required></textarea>
                             <button type="submit">Edit Comment</button>
                         </form>
-                        <button type="button" onclick="closeEditForm('<%=formId%>','<%=buttonId%>')">close</button>
+
+                        <ion-icon onclick="closeEditForm('<%=formId%>','<%=buttonId%>')" name="close-circle-outline"></ion-icon>
                     </div>
                 <%}  %> 
                 <% } %> 
@@ -78,12 +84,15 @@
      <br>    
     <h2>You will see the list of songs inside of <%=playlist.name%> playlist</h2>
     <%songs.forEach(function(song){%>
-        <p><a href="/search/songs/<%=song.track%>"><%= song.name %></a></p>
-        <% if(owner){%>
-            <form method='POST' action="/playlists/<%=playlist.name%>/songs/<%=song.track%>/?_method=DELETE">
-                <button type="submit">Remove from playlist</button>
-            </form>
-            <%} %> 
+        <div class="column divider" onclick ="location.href='/search/songs/<%=song.track%>';"
+        style="min-width:fit-content; width: 30%; min-height:fit-content; height: 40px; background-color: rgb(246, 245, 245);">
+                <p><%= song.name %> <br> - <%= song.artist %> </p>
+                <% if(owner){%>
+                    <form method='POST' action="/playlists/<%=playlist.name%>/songs/<%=song.track%>/?_method=DELETE">
+                        <button type="submit">Remove from playlist</button>
+                    </form>
+                    <%} %> 
+        </div>
             <%})%>
     <% }else{ %>
                 <p>you do n0t have permistion</p>

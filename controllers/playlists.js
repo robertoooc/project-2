@@ -40,6 +40,9 @@ router.get('/:id', async function(req,res){
             const findAll = await db.activity.findAll({
                 where:{
                     playlistId: findPlaylist.id
+                },
+                include:{
+                    model: db.user
                 }
             })
             let findLikes,likeCount,findComments

@@ -147,8 +147,41 @@ a, a:visited {
 }
 .content{
   margin-top: 10%;
+  margin-left: 5%;
 }
-
+.icon{
+  font-size: 2.4em;
+}
+.column{
+  margin: 20px;
+}
+.column form {
+  display: inline;
+}
+.divider{
+  /* background: rgba(112, 106, 101, 0.116); */
+  min-height:50px;
+  background-color: rgba(224, 229, 229, 0.794);
+  border-radius: 8px;
+  padding-left: 10px;
+  box-shadow: 0 15px 15px rgba(98, 63, 44, 0.158);
+}
+.avatar{
+  border-radius: 50%;
+  padding: 2px;
+  background-color: white;
+  border: 1px solid white;
+  float:left;
+  margin: 5px 10px auto 10px;
+}
+.parentContainer{
+  display:flex;
+}
+.childContainer{
+  flex: 50%;
+  padding: 10px;
+  height: 300px;
+}
 
 
 
@@ -188,48 +221,5 @@ header.open .nav li a{
   display:none;
 }
 }
-/*   
-  width:100vw;
-  height: 5%;
-  display:flex;100
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 100px;
-  color: whitesmoke; */
 
-/* .navBar ul{
-  display: flex;
-}
-.navBar ul li a {
-  display: block;
-  font-size: 18px;
-  padding: 10px 25px;
-  border-radius: 30px;
-  transition: 0.2s;
-  margin: 0 5px;
-}
-.navBar ul li a:hover {
-background: whitesmoke;
-color:black;
-}
-a:hover {
-  color: red;
-}
-a, a:visited {
-  color: inherit;
-} */
-/* input{
-  background-color: transparent;
-  border-radius: 7px;
-}
-button{
-  background-color: transparent;
-  border-radius: 7px;
-}
-.navBtn{
-  border: none;
-} */
-.show{
-  display: block;
-}
 
