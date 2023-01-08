@@ -33,7 +33,7 @@
     let header = document.querySelector('header')
     let nav = document.querySelector('.nav')
     let hamburgerMenu = document.querySelector('.hamburgerMenu')
-
+    let navEl = document.querySelectorAll('.navEl')
     hamburgerMenu.addEventListener('click', function(){
         header.classList.toggle('open')
         searchBox.classList.remove('active')
@@ -46,12 +46,18 @@
         closeBtn.classList.add('active')
         hamburgerMenu.classList.add('hidden')
         header.classList.remove('open')
+        navEl.forEach(function(el){
+            el.classList.add('hide')
+        })
     })
     closeBtn.addEventListener('click', function(){
         searchBox.classList.remove('active')
         searchBtn.classList.remove('active')
         closeBtn.classList.remove('active')
         hamburgerMenu.classList.remove('hidden')
+        navEl.forEach(function(el){
+            el.classList.remove('hide')
+        })
     })
 
 </script>

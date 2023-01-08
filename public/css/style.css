@@ -234,25 +234,28 @@ footer p {
     transform: translateX(40px);
     z-index: 10;
   }
-header .nav{
-  opacity: 0;
-  position: absolute;
-  visibility: hidden;
-  left: 100%;
-}
-header.open .nav{
-  top: 80px;
-  opacity: 1;
-  visibility: visible;
-  left: 0%;
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  height: calc(100vh - 80px);
-  padding: 40px;
-  /* border-top: 1px solid rgba(0,0,0,0.5); */
-}
-header.open .nav li a{
+  header .nav{
+    opacity: 0;
+    position: absolute;
+    visibility: hidden;
+    left: 100%;
+  }
+
+  header.open .nav{
+    /* margin-top:calc(100%-7%) ; */
+    /* margin-top: calc(100%-14%);   */
+    top:100%;
+    opacity: 1;
+    visibility: visible;
+    left: 0%;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: calc(100vh/4);
+    padding: 40px;
+    background-color: grey;
+  }
+  header.open .nav li a{
   font-size: 1.25em;
 }
 .hidden{
