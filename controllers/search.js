@@ -21,8 +21,8 @@ res.redirect(`/search/${path}${req.query.searchBy}`)
 }catch(error){
     res.send('messed up in the get /search  ' + error)
 }
-
 })
+
 router.get('/playlists', async function(req,res){
     try{
         let Op = Sequelize.Op;
@@ -35,7 +35,6 @@ router.get('/playlists', async function(req,res){
                 model: db.user
             }
         })
-        //res.send(findOtherPlaylists)
         res.render('otherplaylist.ejs',{
             playlists: findOtherPlaylists
         })
@@ -74,38 +73,55 @@ router.get('/songs', async function(req,res){
         res.send('You messed up in the /users/artists route' + error)
     }
 })
-
-router.get('/artists/:id', async function(req,res){
+router.get('/artists/songs',async function(req,res){
     try{
-        const response = await axios.get(`https://api.musixmatch.com/ws/1.1/artist.albums.get?artist_id=${req.params.id}&page_size=100&s_album_rating=desc&g_album_name=1&apikey=${API_KEY}`)
-        //res.send(response.data)
-        res.render('album.ejs',{
-            albums: response.data.message.body.album_list
+        if(req.query.artistName == undefined || req.query.artistId == undefined){
+            res.redirect('/')
+        }
+        const response = await axios.get(`https://api.musixmatch.com/ws/1.1/track.search?q_artist=${req.query.artistName}&f_artist_id=${req.query.artistId}&page_size=10&page=1&s_track_rating=desc&apikey=${API_KEY}`)
+        // res.send(response.data)
+        res.render('lists.ejs',{
+            songs: response.data.message.body.track_list,
+            artistName: req.query.artistName,
+            searchBy: 'artistSongs'
         })
     }catch(error){
-        res.send('You messed up in the /users/artists/id route' + error)  
+        res.send('you messesd up in the get artists/songs route' + error)
     }
- })
- router.get('/albums/:id', async function(req,res){
-     try{
-         const response = await axios.get(`https://api.musixmatch.com/ws/1.1/album.tracks.get?album_id=${req.params.id}&f_has_lyrics=1&page=1&page_size=25&apikey=${API_KEY}`)
+})
+// router.get('/artists/:id', async function(req,res){
+//     try{
+//         const response = await axios.get(`https://api.musixmatch.com/ws/1.1/artist.albums.get?artist_id=${req.params.id}&page_size=100&s_album_rating=desc&g_album_name=1&apikey=${API_KEY}`)
+//         //res.send(response.data)
+//         res.render('album.ejs',{
+//             albums: response.data.message.body.album_list
+//         })
+//     }catch(error){
+//         res.send('You messed up in the /users/artists/id route' + error)  
+//     }
+//  })
+//  router.get('/albums/:id', async function(req,res){
+//      try{
+//          const response = await axios.get(`https://api.musixmatch.com/ws/1.1/album.tracks.get?album_id=${req.params.id}&f_has_lyrics=1&page=1&page_size=25&apikey=${API_KEY}`)
          
-         res.render('album.ejs',{
-             tracks:response.data.message.body.track_list
-            })  
-        }catch(error){
-            res.send('You messed up in the /users/albums/id route' + error)
-        }
-    })
+//          res.render('album.ejs',{
+//              tracks:response.data.message.body.track_list
+//             })  
+//         }catch(error){
+//             res.send('You messed up in the /users/albums/id route' + error)
+//         }
+//     })
+
     //==READS SPECIFIC SONG==\\
     router.get('/songs/:id', async function(req,res){
         try{
             const response = await axios.get(`https://api.musixmatch.com/ws/1.1/track.get?commontrack_id=${req.params.id}&f_has_lyrics=1&apikey=${API_KEY}`)
             let lyrics
+            //=======FIND WAY TO CANCEL EVERYTHING IF THIS FAILS ====\\\\\
             if(response.data.message.body.track.has_lyrics == '1'){
                 lyrics = await axios.get(`https://api.musixmatch.com/ws/1.1/track.lyrics.get?commontrack_id=${req.params.id}&apikey=${API_KEY}`)
                 lyrics = lyrics.data.message.body.lyrics
-            } else{ lyrics = false}
+             } else{ lyrics = false}
             let findUserPlaylist
             if (res.locals.user){
                  findUserPlaylist= await db.playlist.findAll({
@@ -136,15 +152,18 @@ router.get('/artists/:id', async function(req,res){
                 if(src.img == ''){
                     src.img='https://www.pbpusa.org/Shared/img/notfound.png'
                 }
-                res.render('searchSpecific.ejs',{
-                    song: response.data.message.body.track,    
-                    lyrics:lyrics,
-                    playlists: findUserPlaylist,
+        res.render('searchSpecific.ejs',{
+            song: response.data.message.body.track,    
+            lyrics:lyrics,
+            playlists: findUserPlaylist,
             img: src
         })
     } catch(error){
         console.log(error+'🐥🐥🐥🐥🐥')
-        res.send('you messed up in the users/songs/:id get route'+error)
+        res.render('error.ejs',{
+            error: error
+        })
+        //res.send('you messed up in the users/songs/:id get route'+error)
     }
 })
 

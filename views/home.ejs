@@ -1,28 +1,32 @@
 <%- include('partials/header.ejs',{user}) %> 
+<button onclick ="openEditForm('pubPlaylists','topSongs')">See Playlists</button>
+<button onclick ="closeEditForm('pubPlaylists','topSongs')">See Top Songs</button>
+<br>
+<div id ='topSongs'>
+    <h1>
+        Popular songs:
+    </h1>
+    <% if(typeof popSongs !== 'undefined') {%> 
+    <% popSongs.forEach(function(search){ %>
+        <div onclick="location.href='/search/songs/<%=search.track.commontrack_id%>';" class="column">
+            <p><%= search.track.track_name %><br> - <%= search.track.artist_name%></p>
+        </div>
+    <%})}%> 
+</div>
 
-<h1>
-    Popular songs:
-</h1>
-<% if(typeof popSongs !== 'undefined') {%> 
-<% popSongs.forEach(function(search){ %>
-    <div class="column">
-
-    </div>
-    <p><a href="/search/songs/<%=search.track.commontrack_id%>"><%= search.track.track_name %>, <%= search.track.artist_name%> </a></p>
-<%})}%> 
-
-
-<h1>Public playlists you might like</h1>
-<% if(publicPlaylists.length > 5) {%>
-    <% while(publicPlaylists.length > 5){publicPlaylists.pop()}%> 
-    <% } %>  
-<% publicPlaylists.forEach(function(playlist){ %>
-    <div class="column">
-        <img class ='avatar' alt="user avatar" src ='https://avatars.dicebear.com/api/bottts/<%=playlist.user.name%><%=playlist.user.id %>.png?size=40'>
-        <p><strong>Playlist name: </strong><%= playlist.name %><br><strong>By: </strong> <%=playlist.user.name%></p>
-        <form method="GET" action='/playlists/<%=playlist.id%>'>
-            <button type="submit">See the deets</button>
-            </form>
-    </div>
-    <% }) %>  
+<div id="pubPlaylists" class="hide">
+    <h1>Public playlists you might like</h1>
+    <% if(publicPlaylists.length > 5) {%>
+        <% while(publicPlaylists.length > 5){publicPlaylists.pop()}%> 
+        <% } %>  
+    <% publicPlaylists.forEach(function(playlist){ %>
+        <div class="column">
+            <img class ='avatar' alt="user avatar" src ='https://avatars.dicebear.com/api/bottts/<%=playlist.user.name%><%=playlist.user.id %>.png?size=40'>
+            <p><strong>Playlist name: </strong><%= playlist.name %><br><strong>By: </strong> <%=playlist.user.name%></p>
+            <form method="GET" action='/playlists/<%=playlist.id%>'>
+                <button type="submit">See the deets</button>
+                </form>
+        </div>
+        <% }) %>  
+</div>
 <%- include('partials/footer.ejs') %> 

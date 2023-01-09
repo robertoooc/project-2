@@ -13,6 +13,7 @@ body {
   display:flex;
   flex-direction: column;
 }
+
 .name{
 text-decoration: none;
 font-size: 1.75em;
@@ -224,6 +225,13 @@ footer p {
 
 
 @media (max-width: 900px) {
+  body{
+    overflow-x: hidden;
+  }
+  .content{
+    /* position: relative; */
+    margin-top: 25%;
+  }
   #searchBtn{
     left:0;
   }

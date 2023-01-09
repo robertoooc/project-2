@@ -26,7 +26,11 @@
         document.getElementById(close).style.display='none'
         document.getElementById(open).style.display ='block'
     }
- 
+    function submitForm(form){
+       let submitForm= document.getElementById(form)
+       console.log(submitForm)
+    submitForm.submit()
+    }
     let searchBtn = document.getElementById('searchBtn')
     let closeBtn = document.getElementById('closeBtn')
     let searchBox = document.querySelector('.searchBox')

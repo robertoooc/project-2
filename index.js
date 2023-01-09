@@ -72,7 +72,8 @@ app.get('/', async function(req, res) {
         res.render('home.ejs', {
             user: res.locals.user,
             publicPlaylists: findPubPlaylist
-            //,popSongs: search.data.message.body.track_list
+            // ,
+            // popSongs: search.data.message.body.track_list
         })
 
     }catch(error){
@@ -86,6 +87,10 @@ app.get('/', async function(req, res) {
 const path = require('path')
 app.use(express.static(path.join(__dirname, 'public')))
 
+app.get('*', function(req,res){
+    // res.sendFile(__dirname + 'error.ejs')
+    res.render('error.ejs')
+})
 // listen on a port
 app.listen(PORT, () => {
     console.log(`authenticating users on PORT ${PORT} 🔐`)

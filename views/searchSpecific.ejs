@@ -1,8 +1,10 @@
 <%- include('partials/header.ejs',{user}) %> 
 <h1>Specific details of song: <%=song.track_name%></h1>
-<a>By: <%=song.artist_name%></a>
-<h2><a href="/search/artists/<%=song.artist_id%>">By: <%=song.artist_name%></a></h2>
+<br>
+<h2>By: <a href="/search/artists/<%=song.artist_id%>"><%=song.artist_name%></a></h2>
+<br>
 <img alt="<%=song.track_name%>" src="<%=img.img%>"/>
+<br>
 <% if(playlists) {%> 
 <form method ='POST' action="/users/songs/<%=song.commontrack_id%> ">
     <label for="list">Select playlist:</label>
@@ -13,8 +15,8 @@
     </select>
     <button type="submit">Add to playlist</button>
 </form>
-<% } %> 
-<h2>Lyrics:</h2>
+<% } %> <br>
+<h2>Lyrics:</h2><br>
 <% if(lyrics === undefined){ %> 
     <p>There are no lyrics available for this song</p>
     <% }else{ %>

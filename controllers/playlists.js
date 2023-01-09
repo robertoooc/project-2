@@ -84,6 +84,7 @@ router.get('/:id', async function(req,res){
             })
         }
     }catch(error){
+    //========MESSAGE WILL SAY PLAYLIST DOES NOT EXIST ==///    
         console.log('🐙🐙🐙🐙🐙You messed up in the get /playlists/:id🐙🐙🐙🐙' + error) 
         res.send('You messed up in the get /playlists/:id' + error) 
     }

@@ -1,6 +1,26 @@
 
 <%- include('partials/header.ejs',{user}) %>
 <% if(view||owner){ %>
+    <br>
+    <h2>Playlist Name: <%=playlist.name%></h2>    
+       <h3>By: <%= playlist.user.name %> </h3>
+       <% if(songs.length == 0){%> 
+           <br>
+           <p>No songs in this playlist</p>
+           <br>
+       <%} %> 
+
+    <%songs.forEach(function(song){%>
+       <div class="column divider" onclick ="location.href='/search/songs/<%=song.track%>';"
+       style="min-width:fit-content; width: 30%; min-height:fit-content; height: 40px; background-color: rgb(246, 245, 245);">
+               <p><%= song.name %> <br> - <%= song.artist %> </p>
+               <% if(owner){%>
+                   <form method='POST' action="/playlists/<%=playlist.name%>/songs/<%=song.track%>/?_method=DELETE">
+                       <button type="submit">Remove from playlist</button>
+                   </form>
+                   <%} %> 
+       </div>
+           <%})%>
     <% if(owner){ %>
         <button type="button" onclick="openEditForm('form', 'openButton')" id ="openButton" >Edit</button>
         <div id="form" class ='hide'>
@@ -42,13 +62,15 @@
             <br>
        <% } %>  
     <% } %>
-    <p> <%=likes%> Like</p>
-    <p><%=comments.length%> Comments </p>
-
-    <button type="button" onclick="openEditForm('commentSection','openComments')" id="openComments">Open Comments</button>
-<div class = 'hide' id="commentSection">
-    <% comments.forEach(function(comment){%>
-
+    <div class="commentSection">
+        <p><%= likes %> Likes</p>
+        <p><%=comments.length%> Comments</p>
+        
+        
+        <button type="button" onclick="openEditForm('commentSection','openComments')" id="openComments">Open Comments</button>
+        <div class = 'hide' id="commentSection">
+            <% comments.forEach(function(comment){%>
+                
         <div class="column divider">
             <img class="avatar" alt="<%=comment.user.name%> avatar" src = 'https://avatars.dicebear.com/api/bottts/<%=comment.user.name%><%=comment.user.id %>.svg?size=35'>
             <div class="alignLeft">
@@ -72,35 +94,18 @@
                             <textarea id="updatedComment" name="updatedComment" required></textarea>
                             <button type="submit">Edit Comment</button>
                         </form>
-
+                        
                         <ion-icon onclick="closeEditForm('<%=formId%>','<%=buttonId%>')" name="close-circle-outline"></ion-icon>
                     </div>
-                <%}  %> 
-                <% } %> 
+                    <%}  %> 
+                    <% } %> 
+                </div>
+                <%}) %>  
+                <button type="button" onclick="closeEditForm('commentSection','openComments')">Close Comments</button>
+            </div>
         </div>
-     <%}) %>  
-     <button type="button" onclick="closeEditForm('commentSection','openComments')">Close Comments</button>
-</div>
-     <br>
-     <h2>Playlist Name: <%=playlist.name%></h2>    
-        <h3>By: <%= playlist.user.name %> </h3>
-        <% if(songs.length == 0){%> 
-            <br>
-            <p>No songs in this playlist</p>
-        <%} %> 
-    <%songs.forEach(function(song){%>
-        <div class="column divider" onclick ="location.href='/search/songs/<%=song.track%>';"
-        style="min-width:fit-content; width: 30%; min-height:fit-content; height: 40px; background-color: rgb(246, 245, 245);">
-                <p><%= song.name %> <br> - <%= song.artist %> </p>
-                <% if(owner){%>
-                    <form method='POST' action="/playlists/<%=playlist.name%>/songs/<%=song.track%>/?_method=DELETE">
-                        <button type="submit">Remove from playlist</button>
-                    </form>
-                    <%} %> 
-        </div>
-            <%})%>
-    <% }else{ %>
+            <% }else{ %>
                 <p>you do n0t have permistion</p>
-        <% } %> 
-
-    <%- include('partials/footer.ejs') %> 
+                <% } %> 
+                
+                <%- include('partials/footer.ejs') %> 
