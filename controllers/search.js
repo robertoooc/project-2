@@ -7,6 +7,7 @@ const Sequelize = require("sequelize");
 const API_KEY =process.env.API_KEY
 const OTHER_KEY =process.env.OTHER_KEY
 
+// == FOR NAV SEARCH BAR WILL CHECK WHICH OF THE THREE OPTIONS THE USER CHOOSES TO SEARCH BY AND SENDS THEM THERE BECAUSE THEYRE DIFFERENT ROUTES
 router.get('/', async function(req,res){
 try{
     let path
@@ -23,6 +24,7 @@ res.redirect(`/search/${path}${req.query.searchBy}`)
 }
 })
 
+// ALLOWS FOR USER TO SEARCH PLAYLISTS THAT ARE PUBLIC
 router.get('/playlists', async function(req,res){
     try{
         let Op = Sequelize.Op;
@@ -58,6 +60,7 @@ router.get('/songs', async function(req,res){
         }
     })
     
+    // GETS LIST OF ARTSITS FROM SEARCH
     router.get('/artists', async function(req,res){
         try{
         if(req.query.search2 == undefined){
@@ -73,6 +76,8 @@ router.get('/songs', async function(req,res){
         res.send('You messed up in the /users/artists route' + error)
     }
 })
+
+ // ONCE YOU HAVE LIST OF ARTISTS YOU CAN CLICK ON THEM AND WILL SEND YOU HERE WHICH WILL GENERATE THAT ARTISTS 10 TOP TRACKS
 router.get('/artists/songs',async function(req,res){
     try{
         if(req.query.artistName == undefined || req.query.artistId == undefined){
@@ -117,11 +122,11 @@ router.get('/artists/songs',async function(req,res){
         try{
             const response = await axios.get(`https://api.musixmatch.com/ws/1.1/track.get?commontrack_id=${req.params.id}&f_has_lyrics=1&apikey=${API_KEY}`)
             let lyrics
-            //=======FIND WAY TO CANCEL EVERYTHING IF THIS FAILS ====\\\\\
             if(response.data.message.body.track.has_lyrics == '1'){
                 lyrics = await axios.get(`https://api.musixmatch.com/ws/1.1/track.lyrics.get?commontrack_id=${req.params.id}&apikey=${API_KEY}`)
                 lyrics = lyrics.data.message.body.lyrics
              } else{ lyrics = false}
+             // findUserPlaylist is if a user is logged in give them the option to add this specific song to one of their playlists
             let findUserPlaylist
             if (res.locals.user){
                  findUserPlaylist= await db.playlist.findAll({
@@ -132,8 +137,8 @@ router.get('/artists/songs',async function(req,res){
                 }else{
                     findUserPlaylist= false
                 }
+                // last.fm api sometimes returns error when artist name has a feat. or -single in album name so needed to cut those out
                 let str =response.data.message.body.track.artist_name
-                //str = str.toLowerCase()
                 let check = `feat.`
                 if(str.includes(check)){
                     let cutOff = str.indexOf(check) - 1
@@ -149,6 +154,7 @@ router.get('/artists/songs',async function(req,res){
                 const img = await axios.get(`http://ws.audioscrobbler.com/2.0/?method=album.getinfo&api_key=${OTHER_KEY}&artist=${str}&album=${alb}&format=json`)
                 let src = img.data.album.image[4]
                 src['img'] =src['#text']
+                // if api doesn't return img url just provide a blank one
                 if(src.img == ''){
                     src.img='https://www.pbpusa.org/Shared/img/notfound.png'
                 }

@@ -124,6 +124,8 @@ router.get('/profile', async function (req, res) {
         res.send('you messed up in get /users/profile'+ error)
     }
 })
+
+// RENDERS PAGE TO SEE LIST OF LIKES AND COMMENT A USER HAS MADE BEFORE
 router.get('/actions', async function(req,res){
     try{
         if(res.locals.user){

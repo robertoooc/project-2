@@ -59,7 +59,7 @@ app.use((req, res, next) => {
 // routes and controllers
 app.get('/', async function(req, res) {    
     try{
-        // const search = await axios.get(`https://api.musixmatch.com/ws/1.1/chart.tracks.get?chart_name=mxmweekly&page=1&page_size=15&f_has_lyrics=1&apikey=${API_KEY}`)
+        const search = await axios.get(`https://api.musixmatch.com/ws/1.1/chart.tracks.get?chart_name=mxmweekly&page=1&page_size=15&f_has_lyrics=1&apikey=${API_KEY}`)
         const findPubPlaylist = await db.playlist.findAll({
             where:{
                 status: true
@@ -71,8 +71,8 @@ app.get('/', async function(req, res) {
         res.render('home.ejs', {
             user: res.locals.user,
             publicPlaylists: findPubPlaylist
-            // ,
-            // popSongs: search.data.message.body.track_list
+            ,
+            popSongs: search.data.message.body.track_list
         })
     }catch(error){
         res.send('error in main page'+error)

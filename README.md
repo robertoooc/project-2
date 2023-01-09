@@ -1,5 +1,8 @@
 # HalfBeat
 An app where you can look up your favorite songs and see the artist and lyrics corresponding to them. Also allowing you to search by artists and viewing their top tracks. This app allows you to create your own playlists where you can control their privacy status which means that you can choose to share your playlists to the public. Not only can you view someone else's playlist but you can also like and comment on them as well.
+## deployed link
+<a href='https://roberto-project-two-1114.herokuapp.com/'>Link</a>
+
 ## Technologies Used
 * Javascript
 * HTML
@@ -16,7 +19,13 @@ An app where you can look up your favorite songs and see the artist and lyrics c
 
 ## API's used
 * Musixmatch - provided all the song information and allowed to search
+* [musixmatch Link](https://developer.musixmatch.com/documentation)
 * Last.fm - provided the album images for the songs
+* [Last.fm Link](https://www.last.fm/api/intro)
+* Dicebear - provides images for the character avatars
+* [Dicebear Link](https://dicebear.com/styles/bottts)
+
+
 
 ## Installation instructions
 * Fork and clone this repository

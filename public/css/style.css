@@ -157,7 +157,7 @@ a, a:visited {
   font-size: 1.55em;
 }
 .icon{
-  font-size: 2.6em;
+  font-size: 2.1em;
 }
 .column{
   margin: 20px;
@@ -180,6 +180,9 @@ a, a:visited {
   border: 1px solid white;
   float:left;
   margin: 5px 10px auto 10px;
+}
+.enlarge{
+  
 }
 .parentContainer{
   display:flex;

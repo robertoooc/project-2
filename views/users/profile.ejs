@@ -1,54 +1,63 @@
 <%- include('../partials/header',{user}) %>
-<h3>Hey, <%= user.name %> thanks for logging into the app </h3>
-
-<ion-icon class ='icon' id="createPlaylistBtn" onclick="openEditForm('createPlaylist','createPlaylistBtn')" name="add"></ion-icon>
-<div class ='hide' id ='createPlaylist'>
-    <form method="POST" action="/playlists">
-        <label for="newPlaylist">Create a new playlist: </label>
-        <input id='newPlaylist' type ='text' name='newPlaylist' autocomplete="off" required/>
-        <label for="public">public: </label>
-        <input id='public' value='public' type ='radio' name='status' required/>
-        <label for="private">private: </label>
-        <input id='private' value='private' type ='radio' name='status' required/>
-        <button type="Submit">Submit</button>
-        <ion-icon class ='icon' onclick="closeEditForm('createPlaylist','createPlaylistBtn')" name="close"></ion-icon>
-    </form>
-</div>
-<% if(playlists.length>0){%>
-    <ion-icon class ='icon' id ='deletePlaylistIcon' onclick="openEditForm('deletePlaylistForm','deletePlaylistIcon')" name="trash"></ion-icon>
-    <div class="hide" id ='deletePlaylistForm'>
-        <form method ='POST' action="/playlists/?_method=DELETE">
-            <label for="deletePlaylist">Delete a playlist:</label>
-            <select name="deletePlaylist" id="deletePlaylist">
-                <% playlists.forEach(function(playlist){ %> 
-                    <option value="<%=playlist.name%>"><%=playlist.name%> </option>
-                    <% }) %> 
-            </select>
-            <button type="submit">Remove</button>
-                <ion-icon class ='icon' onclick="closeEditForm('deletePlaylistForm','deletePlaylistIcon')" name="close"></ion-icon>
-        </form>
-    </div>
-<%} %> 
-<p>view your playlist here</p>
-
-<% playlists.forEach(function(playlist){ %>
-    <div class="column">
-        <% let status %> 
-        <% playlist.status== true ? status = 'open' : status = 'closed' %> 
+<div>
+    <div >
+        <img class="avatar enlarge" src='https://avatars.dicebear.com/api/bottts/<%=user.name%><%=user.id %>.png?size=70' alt="user avatar"><br>
+        <h3> <%= user.name %>'s playlist </h3>
+        <div style="padding-left: 40%;flex-direction: row; position:absolute;">
+            <ion-icon class ='icon' style="font-size:2em; " id="createPlaylistBtn" onclick="openEditForm('createPlaylist','createPlaylistBtn')" name="add"></ion-icon>
+            <div class ='hide' id ='createPlaylist'>
+                <form method="POST" action="/playlists">
+                    <label for="newPlaylist">Create a new playlist: </label>
+                    <input id='newPlaylist' type ='text' name='newPlaylist' autocomplete="off" required/>
+                    <label for="public">public: </label>
+                    <input id='public' value='public' type ='radio' name='status' required/>
+                    <label for="private">private: </label>
+                    <input id='private' value='private' type ='radio' name='status' required/>
+                    <button type="Submit">Submit</button>
+                    <ion-icon class ='icon' style="font-size:2em; " onclick="closeEditForm('createPlaylist','createPlaylistBtn')" name="close"></ion-icon>
+                </form>
+            </div>
+            <% if(playlists.length>0){%>
+                <ion-icon class ='icon' style="font-size:2em;flex-direction: row;  position:absolute;" id ='deletePlaylistIcon' onclick="openEditForm('deletePlaylistForm','deletePlaylistIcon')" name="trash"></ion-icon>
+                <div class="hide" id ='deletePlaylistForm'>
+                    <form method ='POST' action="/playlists/?_method=DELETE">
+                        <label for="deletePlaylist">Delete a playlist:</label>
+                        <select name="deletePlaylist" id="deletePlaylist">
+                            <% playlists.forEach(function(playlist){ %> 
+                                <option value="<%=playlist.name%>"><%=playlist.name%> </option>
+                                <% }) %> 
+                            </select>
+                            <button type="submit">Remove</button>
+                            <ion-icon class ='icon' style="font-size:2em; " onclick="closeEditForm('deletePlaylistForm','deletePlaylistIcon')" name="close"></ion-icon>
+                        </form>
+                    </div>
+                    <%} %> 
+                </div>
+            </div>
+        </div>
+    <br>
+    <div style="padding-top:20px;">
+        <p>Playlists: </p>
         
-        <p><%= playlist.name %>  <ion-icon name="lock-<%=status%>"></ion-icon></p>
-        <form method="GET" action='/playlists/<%=playlist.id%>'>
-            <button type="submit">See the deets</button>
-        </form>       
-    </div>
-<%})%>
+        <% playlists.forEach(function(playlist){ %>
+            <div class="column">
+                <% let status %> 
+                <% playlist.status== true ? status = 'open' : status = 'closed' %> 
+                
+                <p><%= playlist.name %>  <ion-icon name="lock-<%=status%>"></ion-icon></p>
+                <form method="GET" action='/playlists/<%=playlist.id%>'>
+                    <button type="submit">See the deets</button>
+                </form>       
+            </div>
+            <%})%>
 
-<form method="GET" action="/playlists/songs">
-    <button type="submit">See list of all your songs</button>
-</form>
-
-<form method="GET" action="/users/actions">
-    <button type="submit">See list likes and comments</button>
-</form>
+            <form method="GET" action="/playlists/songs">
+                <button type="submit">See list of all your songs</button>
+            </form>
+            
+            <form method="GET" action="/users/actions">
+                <button type="submit">See list likes and comments</button>
+            </form>
+        </div>
 
 <%- include('../partials/footer') %>

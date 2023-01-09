@@ -2,9 +2,13 @@ const express = require('express')
 require('dotenv').config()
 const db = require('../models')
 const router = express.Router()
+
+//== RENDERS THE GET ALL SONGS FROM ALL PLAYLISTS CORRESPONDING TO USER
+//
 router.get('/songs', async function(req,res){
     try{
         if(res.locals.user){
+            //  finds all playlists a user has and gets all the songs within them
             const findUser = await db.user.findByPk(res.locals.user.id)
             const findPlaylists = await findUser.getPlaylists()
             let allSongs =[]
@@ -15,6 +19,7 @@ router.get('/songs', async function(req,res){
             allSongs.push(songs[j])
         }
     }
+    // checking that the new array i created for the songs does not hold duplicates in the case of a user having the same song in multiple playlists
     const newArr = allSongs.map((song) => [song.id, song]);
     const newMap = new Map(newArr);
     const iterator = newMap.values();
@@ -28,6 +33,7 @@ router.get('/songs', async function(req,res){
     res.send('You messed up in the get /playlists/songs' + error) 
 }
 })
+
 //==READS SPECIFIC USERS PLAYLIST==\\
 router.get('/:id', async function(req,res){
     try{
@@ -47,6 +53,7 @@ router.get('/:id', async function(req,res){
                     model: db.user
                 }
             })
+            // filtering out the comments from the likes
             let findLikes,likeCount,findComments
             findLikes = findAll.filter(activity => activity.like == true)
             likeCount = findLikes.length
@@ -55,6 +62,7 @@ router.get('/:id', async function(req,res){
             if(findPlaylist == null){
                 res.send('does not exist')
             }else{
+                // checking if a playlist is public or if the user logged in might be the owner
                 const songs = await findPlaylist.getSongs()
                 findPlaylist.status ? view = true: view = false
                 if(res.locals.user){
@@ -89,9 +97,11 @@ router.get('/:id', async function(req,res){
         res.send('You messed up in the get /playlists/:id' + error) 
     }
 })
+
 //====CREATES A USERS PLAYLIST====\\
 router.post('/', async function(req,res){
     try{
+        // checking to see if User already has a playlist with that same name
         let public 
         req.body.status=='public'? public = true: public =false
         const findPlaylist = await db.playlist.findOne({
@@ -100,7 +110,6 @@ router.post('/', async function(req,res){
                     name: req.body.newPlaylist
                 }
             })
-            //res.send(findPlaylist.status)
             if(findPlaylist){
                 res.send('you already have a playlist with that name')
             }else{
@@ -116,8 +125,11 @@ router.post('/', async function(req,res){
             res.send('you messed up in the post /playlist '+error)
         }
     })
+
+    //== ALLOWS USER TO POST COMMENTS TO SPECIFIC PLAYLIST
     router.post('/comments', async function(req,res){
         try{
+            // making sure user is logged in to allow this interaction
             if(res.locals.user){
                 const findPlaylist = await db.playlist.findOne({
                     where:{
@@ -137,6 +149,8 @@ router.post('/', async function(req,res){
             res.send('you messed up in the post /playlist/comments '+error) 
         }
     })
+
+    //=== ALLOWS USER TO UPDATE A COMMENT FROM PLAYLIST
     router.put('/comments', async function(req,res){
         try{
             const findComment = await db.activity.findByPk(req.body.commentId)
@@ -146,6 +160,8 @@ router.post('/', async function(req,res){
             res.send('you messed up in the put /playlists/comments '+ error)
         }
     })
+
+    //== ALLOWS USER TO DELETE A COMMENT FROM PLAYLIST
     router.delete('/comments', async function(req,res){
         try{
             const findComment = await db.activity.destroy({
@@ -158,6 +174,8 @@ router.post('/', async function(req,res){
             res.send('You messed up in the delete /playlist/comments'+ error)
         }
     })
+
+    //===== ALLOWS USER TO LIKE A PLAYLIST
     router.post('/likes', async function(req,res){
         try{
             if(res.locals.user){
@@ -166,6 +184,7 @@ router.post('/', async function(req,res){
                         id:req.body.playlistId  
                     }
                 })
+                // making sure that a user hasn't already liked this
                 const [addLike,created] = await db.activity.findOrCreate({
                     where:{
                         userId: res.locals.user.id,
@@ -194,6 +213,8 @@ router.post('/', async function(req,res){
             res.send('you messed up in the post /playlist/likes '+error) 
         }
     })
+
+    // == FINDS A LIKE A USER HAS MADE ON A PLAYLIST AND DELETES FROM DB
     router.delete('/likes', async function(req,res){
         try{
             const findLike = await db.activity.destroy({
@@ -208,7 +229,8 @@ router.post('/', async function(req,res){
             res.send('you messed up in the delete /playlist/likes '+error)
         }
     })
-    //====RENAMES A USERS PLAYLIST====\\
+
+    //====RENAMES A USERS PLAYLIST AND ALLOWS PUBLIC STATUS TO CHANGE====\\
     router.put('/', async function(req,res){
         try{
             if(req.body.like){
@@ -222,8 +244,9 @@ router.post('/', async function(req,res){
                         userId: res.locals.user.id,
                         name: req.body.playlist
                     }
-                }) 
+                }) //checking to see if user wants to update name as well or just status
                 if(name){
+                    // making sure user doesn't already have another playlist with the new name they selected
                     const findName = await db.playlist.findOne({
                         where:{
                             userId: res.locals.user.id,
@@ -245,6 +268,7 @@ router.post('/', async function(req,res){
             res.send('you messed up in the put /playlist '+error)   
         }
     })
+
     //====DELETES A USERS PLAYLIST====\\
     router.delete('/',async function(req,res){
         try{
@@ -259,6 +283,7 @@ router.post('/', async function(req,res){
             res.send('you messed up in the delete /playlists ' +error)
         }
     })
+    
     //==REMOVES SONG FROM USERS PLAYLIST==\\
     router.delete('/:playlistName/songs/:songId', async function(req,res){
         try{

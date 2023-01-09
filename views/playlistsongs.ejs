@@ -27,7 +27,7 @@
             <form method ='POST' action="/playlists/?_method=PUT">
                 <input name="playlist" type="hidden" value="<%=playlist.name%>">
                 <label for="newName">update name:</label>
-                <input id="newName" type="text" name ='newName'/>
+                <input id="newName" type="text" name ='newName' autocomplete="off"/>
                 <label for="public">public: </label>
                 <input id='public' value='public' type ='radio' name='status' required/>
                 <label for="private">private: </label>
@@ -81,7 +81,7 @@
                 <%if(comment.userId==user.id){%>
                     <% let formId = `a${comment.id}`%> 
                     <% let buttonId = `b${comment.id}`%>  
-                    <ion-icon onclick="openEditForm('<%=formId%>','<%=buttonId%>')" id ="<%=buttonId%>" name="ellipsis-vertical-circle-outline"></ion-icon>
+                    <ion-icon class="icon" onclick="openEditForm('<%=formId%>','<%=buttonId%>')" id ="<%=buttonId%>" name="ellipsis-vertical-circle-outline"></ion-icon>
                     <div class ='hide' id="<%=formId%>">
                         <form method="POST" action="/playlists/comments?_method=DELETE">
                             <input name="commentId" type="hidden" value="<%=comment.id%>">
@@ -95,7 +95,7 @@
                             <button type="submit">Edit Comment</button>
                         </form>
                         
-                        <ion-icon onclick="closeEditForm('<%=formId%>','<%=buttonId%>')" name="close-circle-outline"></ion-icon>
+                        <ion-icon class="icon" onclick="closeEditForm('<%=formId%>','<%=buttonId%>')" name="close-circle-outline"></ion-icon>
                     </div>
                     <%}  %> 
                     <% } %> 
