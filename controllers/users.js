@@ -153,7 +153,7 @@ router.get('/actions', async function(req,res){
                     }
                 }
             }
-            res.render('actions.ejs',{
+            res.render('users/actions.ejs',{
                 likes: findLikes,
                 comments: findComments  
             }) 

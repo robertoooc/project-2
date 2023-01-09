@@ -1,4 +1,4 @@
-<%- include('partials/header.ejs',{user}) %>
+<%- include('../partials/header.ejs',{user}) %>
 <% let userName = (user.name).toUpperCase() %> 
 <h1><%=userName%>'s list of Likes and Comments</h1>
 <div class="parentContainer">
@@ -20,4 +20,4 @@
      <% }) %> 
   </div>  
 </div>
-<%- include('partials/footer.ejs') %> 
+<%- include('../partials/footer.ejs') %> 

@@ -68,14 +68,12 @@ app.get('/', async function(req, res) {
                 model:db.user
             }
         })
-
         res.render('home.ejs', {
             user: res.locals.user,
             publicPlaylists: findPubPlaylist
             // ,
             // popSongs: search.data.message.body.track_list
         })
-
     }catch(error){
         res.send('error in main page'+error)
     }
