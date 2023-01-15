@@ -20,8 +20,11 @@
 <% if(lyrics === undefined){ %> 
     <p>There are no lyrics available for this song</p>
     <% }else{ %>
-    <p><%=lyrics.lyrics_body%></p> 
-    <p><%=lyrics.lyrics_copyright%></p>
-    <script type="text/javascript" src="<%=lyrics.script_tracking_url%>"></script>
+        <% for( let i in lyrics){%>
+            <p><%= lyrics[i] %> </p>
+       <% } %> 
+    <p><%=copyRight.lyrics_body%></p> 
+    <p><%=copyRight.lyrics_copyright%></p>
+    <script type="text/javascript" src="<%=copyRight.script_tracking_url%>"></script>
 <%} %> 
 <%- include('partials/footer.ejs') %> 

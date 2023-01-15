@@ -77,7 +77,6 @@ app.get('/', async function(req, res) {
                         playlistId: findPubPlaylist[i].id
                     }
                 })
-                // console.log(count.length,findPubPlaylist[i].name,findPubPlaylist[i].id,i , '🤑🤑🤑🤑')
                 let track = count.length
                 let id = findPubPlaylist[i]
                 countTrack.push({
@@ -86,10 +85,8 @@ app.get('/', async function(req, res) {
                 })
             }
             topFive = countTrack.sort((p1, p2) => (p1.count < p2.count) ? 1 : (p1.count > p2.count) ? -1 : 0)
-            console.log(topFive, '🐳')
             findPubPlaylist = topFive
         }
-        console.log('top55',countTrack)
         res.render('home.ejs', {
             user: res.locals.user,
             publicPlaylists: findPubPlaylist

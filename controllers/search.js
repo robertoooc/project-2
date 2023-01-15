@@ -121,10 +121,13 @@ router.get('/artists/songs',async function(req,res){
     router.get('/songs/:id', async function(req,res){
         try{
             const response = await axios.get(`https://api.musixmatch.com/ws/1.1/track.get?commontrack_id=${req.params.id}&f_has_lyrics=1&apikey=${API_KEY}`)
-            let lyrics
+            let lyrics, rows
             if(response.data.message.body.track.has_lyrics == '1'){
                 lyrics = await axios.get(`https://api.musixmatch.com/ws/1.1/track.lyrics.get?commontrack_id=${req.params.id}&apikey=${API_KEY}`)
-                lyrics = lyrics.data.message.body.lyrics
+                lyrics = lyrics.data.message.body.lyrics.lyrics_body
+                rows = lyrics.split('\n')
+                
+
              } else{ lyrics = false}
              // findUserPlaylist is if a user is logged in give them the option to add this specific song to one of their playlists
             let findUserPlaylist
@@ -160,9 +163,10 @@ router.get('/artists/songs',async function(req,res){
                 }
         res.render('searchSpecific.ejs',{
             song: response.data.message.body.track,    
-            lyrics:lyrics,
+            lyrics:rows,
             playlists: findUserPlaylist,
-            img: src
+            img: src,
+            copyRight: lyrics
         })
     } catch(error){
         console.log(error+'🐥🐥🐥🐥🐥')
