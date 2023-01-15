@@ -1,4 +1,5 @@
 <%- include('partials/header.ejs',{user}) %> 
+<!-- RENDERING LIST OF SONGS BASED ON SEARCH -->
 <% if(searchBy == 'songs'){ %> 
 <h1>
     List of searches:
@@ -12,6 +13,7 @@
     </div>
 <%})%> 
 <% } else if(searchBy == 'artists'){ %> 
+    <!-- RENDERING LIST OF ARTISTS BASED ON SEARCH -->
 <h1>
     List of artists:
 </h1>
@@ -29,6 +31,7 @@
     </form>
 <%})%>  
 <% } else if(searchBy=='artistSongs') {%>
+    <!-- RENDERING LIST OF SONGS BASED ON SPECIFIC ARTIST -->
     <h1>
         Popular tracks by <%=artistName%> 
     </h1>
@@ -38,6 +41,7 @@
         </div>
     <% })%>
 <%}else{%>
+    <!-- RENDERING LIST OF USER SONG LIBRARY  -->
     <h1>
         List of all songs user has in playlists:
     </h1>

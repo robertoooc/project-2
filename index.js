@@ -60,7 +60,7 @@ app.use((req, res, next) => {
 app.get('/', async function(req, res) {    
     try{
         const search = await axios.get(`https://api.musixmatch.com/ws/1.1/chart.tracks.get?chart_name=mxmweekly&page=1&page_size=15&f_has_lyrics=1&apikey=${API_KEY}`)
-        const findPubPlaylist = await db.playlist.findAll({
+        let findPubPlaylist = await db.playlist.findAll({
             where:{
                 status: true
             },
@@ -68,6 +68,28 @@ app.get('/', async function(req, res) {
                 model:db.user
             }
         })
+        let topFive
+         let countTrack=[]
+        if(findPubPlaylist.length>5){
+            for(let i in findPubPlaylist){
+                const count = await db.activity.findAll({
+                    where:{
+                        playlistId: findPubPlaylist[i].id
+                    }
+                })
+                // console.log(count.length,findPubPlaylist[i].name,findPubPlaylist[i].id,i , '🤑🤑🤑🤑')
+                let track = count.length
+                let id = findPubPlaylist[i]
+                countTrack.push({
+                    count: track,
+                    playlistId: id
+                })
+            }
+            topFive = countTrack.sort((p1, p2) => (p1.count < p2.count) ? 1 : (p1.count > p2.count) ? -1 : 0)
+            console.log(topFive, '🐳')
+            findPubPlaylist = topFive
+        }
+        console.log('top55',countTrack)
         res.render('home.ejs', {
             user: res.locals.user,
             publicPlaylists: findPubPlaylist

@@ -21,9 +21,9 @@
         <% } %>  
     <% publicPlaylists.forEach(function(playlist){ %>
         <div class="column">
-            <img class ='avatar' alt="user avatar" src ='https://avatars.dicebear.com/api/bottts/<%=playlist.user.name%><%=playlist.user.id %>.png?size=40'>
-            <p><strong>Playlist name: </strong><%= playlist.name %><br><strong>By: </strong> <%=playlist.user.name%></p>
-            <form method="GET" action='/playlists/<%=playlist.id%>'>
+            <img class ='avatar' alt="user avatar" src ='https://avatars.dicebear.com/api/bottts/<%=playlist.playlistId.user.name%><%=playlist.playlistId.user.id %>.png?size=40'> 
+            <p><strong>Playlist name: </strong><%= playlist.playlistId.name %><br><strong>By: </strong> <%=playlist.playlistId.user.name%></p>
+            <form method="GET" action='/playlists/<%=playlist.playlistId.id%>'>
                 <button type="submit">See the deets</button>
                 </form>
         </div>
