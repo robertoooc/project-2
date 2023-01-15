@@ -124,8 +124,8 @@ router.get('/artists/songs',async function(req,res){
             let lyrics, rows
             if(response.data.message.body.track.has_lyrics == '1'){
                 lyrics = await axios.get(`https://api.musixmatch.com/ws/1.1/track.lyrics.get?commontrack_id=${req.params.id}&apikey=${API_KEY}`)
-                lyrics = lyrics.data.message.body.lyrics.lyrics_body
-                rows = lyrics.split('\n')
+                lyrics = lyrics.data.message.body.lyrics
+                rows = lyrics.lyrics_body.split('\n')
                 
 
              } else{ lyrics = false}
