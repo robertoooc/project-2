@@ -1,7 +1,11 @@
 # HalfBeat
-An app where you can look up your favorite songs and see the artist and lyrics corresponding to them. Also allowing you to search by artists and viewing their top tracks. This app allows you to create your own playlists where you can control their privacy status which means that you can choose to share your playlists to the public. Not only can you view someone else's playlist but you can also like and comment on them as well.
-## deployed link
-<a href='https://roberto-project-two-1114.herokuapp.com/'>Link</a>
+An application where you can look up your favorite songs and see the artist and lyrics corresponding to them. Also allowing you to search by artists and viewing their top tracks. This app allows you to create your own playlists where you can control their privacy status which means that you can choose to share your playlists to the public. Not only can you view someone else's playlist but you can also like and comment on them as well.
+
+## Image of main goals with descriptions
+![Final Product](img/Final%20img.png)
+
+## Deployed link
+<a href='https://roberto-project-two-1114.herokuapp.com/'>Link to App</a>
 
 ## Technologies Used
 * Javascript
@@ -40,12 +44,19 @@ An app where you can look up your favorite songs and see the artist and lyrics c
 The approach I took with this project was to plan for MVP (minimum viable product) and continue scaling as I accomplished my goals. I originally intended on just allowing a user to create a playlist, add songs to a playlist, delete a playlist, and update a playlists' name. Once I started and was able to successfully retrieve information from my API I got started on having functional get routes in which I could search and display searched songs. Shortly after, I moved on to allowing users to create playlists with a simple form, once that was accomplished I had to filter out through all playlists in the db and allow a user to see only theirs so they could add songs to them. Once I finally understood how to correctly assign the relationship of the playlist to songs model I was able to progress quite quickly completing my MVP. Once I had accomplished MVP I wasn't satisfied with my project just yet and decided on including and additional model to allow a user a user to like and comment on someone's playlist, and also giving a user the option of having a public or private playlist. I updated the playlist model to have a status of true or false, implying whether it's public or private. From this I would be able to findAll playlists where the status was set to true which would accomplish the search for public playlist idea that I had. The comments and likes feature came from a new model that I created that would have a foreign key of both the user who made that action and the playlist it occured on. From there I just filtered out the comments from the likes and was able to display them accordingly to each playlist.
 
 ## ERD and RESTful charts
-![ERD](img/ERD.png)
-![RESTful](img/RESTful.png)
-## WireFrames
-![Wire Frame](img/Screenshot%202022-12-22%20at%208.45.15%20AM.png)
-![Wire Frame](img/Screenshot%202022-12-22%20at%208.39.17%20AM.png)
-![Wire Frame](img/Screenshot%202022-12-22%20at%208.34.09%20AM.png)
+
+
+![ERD](img/UpdatedRESTful.png)
+![RESTful chart](img/UpdatedERD.png)
+
+## User Stories
+* As a user, I want to be able to login to my account
+* As a user, I want to be able to search songs
+* As a user, I want to be able to create and name a playlist
+* As a user, I want to be able to add and deleted songs from my playlist
+* As a user, I want to be able to rename my playlist
+* As a user, I want to be able view my playlist
+
 ## MVP Goals
 * Render a page that will display all user's playlists, make playlists clickable
 * Render specific playlists with list of songs in it
@@ -60,12 +71,5 @@ The approach I took with this project was to plan for MVP (minimum viable produc
 ## Post-Reflection
 I'm very happy with the functionality of my project as it does incorporate more features than I had hoped for. Overall I do wish I could've spent more time working on styling and improving the user experience along with trying to keep my code more DRY and RESTful to be easier to understand for others. I really enjoyed working on this project because it did bring more insight on how a backend design is crucial for a website that needs to store data. Originally stepping into this unit about full stack development I didn't feel as if I grasped every concept well, but while working through project I really noticed that with some repitition it finally sunk in. Now as I move forward from this project I do plan on still going back and improving this project in many more ways, maybe create a linkedin styled app for music.
 
-## User Stories
-* As a user, I want to be able to login to my account
-* As a user, I want to be able to search songs
-* As a user, I want to be able to create and name a playlist
-* As a user, I want to be able to add and deleted songs from my playlist
-* As a user, I want to be able to rename my playlist
-* As a user, I want to be able view my playlist
 
 

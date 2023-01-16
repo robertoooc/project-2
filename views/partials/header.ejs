@@ -9,41 +9,45 @@
 </head>
 <body>
     <header>
-        <div class ='name'>halfbeat</div>
-      <div class ='group'>
-        <ul class ='nav'>
-            <li><a class="navEl" href='/'>Home</a></li>
-            <%if(user){%>
-                <li><a class="navEl" href='/users/profile'>Profile</a></li>
-                <li><a class="navEl" href='/users/logout'>Logout</a></li>
-           <% } else{%>
-            <li><a class="navEl" href='/users/login'>Login</a></li>
-            <li><a class="navEl" href='/users/new'>Sign up</a></li>
-            <% } %> 
-        </ul>
-        <div class="searchBar">
-            <span class="icons">
-                <ion-icon id="searchBtn" name="search-outline"></ion-icon>
-                <ion-icon id="closeBtn" name="close-outline"></ion-icon>  
-            </span>
-        </div>
-        <ion-icon class="hamburgerMenu" name="menu-outline"></ion-icon>
-      </div>  
-      <div class="searchBox">
-        <form id ='searchForm' action="/search" method="GET">
-            <div>
-                <select id='selectSearch' name ='searchFor'>
-                    <option  value="songs">Songs</option>
-                    <option  value="artists">Artists</option>
-                    <option  value="playlists">Playlists</option>
-                </select>
-            </div>
-            <div>
-                <input type="text" name="searchBy" autocomplete="off" placeholder="search here... " required/>
-            </div>
-        </form>
-      </div>
+
+
+            <div class ='name' id ='logo'>halfbeat</div>
+            <div class ='group'>
+                <ul class ='nav'>
+                    <li><a class="navEl" href='/'>Home</a></li>
+                    <%if(user){%>
+                        <li><a class="navEl" href='/users/profile'>Profile</a></li>
+                        <li><a class="navEl" href='/users/logout'>Logout</a></li>
+                        <% } else{%>
+                            <li><a class="navEl" href='/users/login'>Login</a></li>
+                            <li><a class="navEl" href='/users/new'>Sign up</a></li>
+                            <% } %> 
+                        </ul>
+                        <div class="searchBar">
+                            <span class="icons">
+                                <ion-icon id="searchBtn" name="search-outline"></ion-icon>
+                                <ion-icon id="closeBtn" name="close-outline"></ion-icon>  
+                            </span>
+                        </div>
+                        <ion-icon class="hamburgerMenu" name="menu-outline"></ion-icon>
+                    </div>  
+                    <div class="searchBox">
+                        <form id ='searchForm' action="/search" method="GET">
+                            <div>
+                                <select id='selectSearch' name ='searchFor'>
+                                    <option  value="songs">Songs</option>
+                                    <option  value="artists">Artists</option>
+                                    <option  value="playlists">Playlists</option>
+                                </select>
+                            </div>
+                            <div id="searchInput">
+                                <input type="text" name="searchBy" autocomplete="off" placeholder="search here... " required/>
+                            </div>
+                        </form>
+                    </div>
+
     </header>
     <div class ='content'>
-    <main>
-
+        <main>
+            
+            

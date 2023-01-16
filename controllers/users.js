@@ -165,35 +165,7 @@ router.get('/actions', async function(req,res){
     }
 }) 
 
-//==ADDS SONG TO SPECIFIC PLAYLIST==\\
-router.post('/songs/:id', async function(req,res){
-    try{
-        if(res.locals.user != null){
-            const response = await axios.get(`https://api.musixmatch.com/ws/1.1/track.get?commontrack_id=${req.params.id}&f_has_lyrics=1&apikey=${API_KEY}`)
-            const findPlaylist = await db.playlist.findOne({
-                where:{
-                    userId: res.locals.user.id,
-                    name: req.body.playlist
-                }
-            })
-            const [findSong,created] = await db.song.findOrCreate({
-                where:{
-                    track: parseInt(req.params.id),
-                    name: response.data.message.body.track.track_name,
-                    artist: response.data.message.body.track.artist_name
-                }    
-            })
-            await findPlaylist.addSong(findSong)
-            res.redirect('/users/profile')
-            
-        } else{
-            res.send('login to an account first') 
-        } 
-    }catch(error){
-       // console.log(req.params.id)
-       res.send('you messed up in the users/songs/:id post route'+ error)
-    }
-})
+
 // export the router
 const path = require('path')
 router.use(express.static(path.join(__dirname, 'public')))

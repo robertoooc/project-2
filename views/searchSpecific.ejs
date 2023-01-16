@@ -6,7 +6,7 @@
 <img alt="<%=song.track_name%>" src="<%=img.img%>"/>
 <br>
 <% if(playlists) {%> 
-<form method ='POST' action="/users/songs/<%=song.commontrack_id%> ">
+<form method ='POST' action="/playlists/songs/<%=song.commontrack_id%> ">
     <label for="list">Select playlist:</label>
     <select name="playlist" id="list">
         <% playlists.forEach(function(playlist){ %> 
@@ -21,7 +21,7 @@
     <p>There are no lyrics available for this song</p>
     <% }else{ %>
         <% for( let i in lyrics){%>
-            <p><%= lyrics[i] %> </p>
+            <p style="padding-bottom:10px;"><%= lyrics[i] %> </p>
        <% } %> 
        <br>
     <p><%=copyRight.lyrics_copyright%></p>

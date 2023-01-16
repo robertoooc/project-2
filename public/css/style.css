@@ -97,11 +97,16 @@ a, a:visited {
   list-style: none;  
 }
 #searchForm{
-  width: 80%
+  width: 80%;
+  /* margin-left: 10%; */
+}
+#searchInput{
+  width: 50%;
 }
 .searchBox.active{
  right: 0; 
- width: 90%
+ width: 90%;
+ padding-left: 11%;
 }
 .searchBox input{
   border-radius: 5px;
@@ -180,9 +185,6 @@ a, a:visited {
   border: 1px solid white;
   float:left;
   margin: 5px 10px auto 10px;
-}
-.enlarge{
-  
 }
 .parentContainer{
   display:flex;
