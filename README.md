@@ -1,11 +1,11 @@
 # HalfBeat
 An application where you can look up your favorite songs and see the artist and lyrics corresponding to them. Also allowing you to search by artists and viewing their top tracks. This app allows you to create your own playlists where you can control their privacy status which means that you can choose to share your playlists to the public. Not only can you view someone else's playlist but you can also like and comment on them as well.
 
-## Image of main goals with descriptions
-![Final Product](img/Final%20img.png)
-
 ## Deployed link
 <a href='https://roberto-project-two-1114.herokuapp.com/'>Link to App</a>
+
+## Image of main goals with descriptions
+![Final Product](img/Final%20img.png)
 
 ## Technologies Used
 * Javascript
