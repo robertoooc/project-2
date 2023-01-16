@@ -149,8 +149,9 @@ router.get('/artists/songs',async function(req,res){
                 }
                 let alb = response.data.message.body.track.album_name
                 alb = alb.toLowerCase()
-                let check2 = `- single`
-                if(alb.includes(check2)){
+                let check2 
+                if(alb.includes('(')||alb.includes('-single')){
+                    alb.includes('(') ? check2  = '(' : check2 = '-single'
                     let cutOfff = alb.indexOf(check2) - 1
                     alb = alb.slice(0,cutOfff)
                 }
