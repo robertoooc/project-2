@@ -2,6 +2,7 @@ const express = require('express')
 require('dotenv').config()
 const db = require('../models')
 const router = express.Router()
+const axios = require('axios')
 
 //== RENDERS THE GET ALL SONGS FROM ALL PLAYLISTS CORRESPONDING TO USER
 //
