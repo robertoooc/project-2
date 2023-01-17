@@ -23,7 +23,7 @@
 <% artistList.forEach(function(search){ %>
     <% let formId = `a${search.artist.artist_id}`%> 
     <div onclick="document.getElementById('<%=formId%>').submit()" class="column">
-        <p type="submit"> <%= search.artist.artist_name %>, <%= search.artist.artist_id%> </p>
+        <p type="submit"> <%= search.artist.artist_name %> </p>
     </div>
     <form id="<%=formId%>" action="/search/artists/songs">  
         <input name="artistName" value="<%= search.artist.artist_name %>" hidden>
