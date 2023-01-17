@@ -3,9 +3,7 @@
 // you must know what they key is to decrypt or unscramble the data
 
 // use crypto-js for encryption
-const mySecret ='I eat cookies for breakfast'
 
-const secretKey ='myPassword'
 
 // Advanced Encryption Standard algo 
 const crypto = require('crypto-js')
@@ -22,7 +20,6 @@ console.log(decrypt.toString(crypto.enc.Utf8))
 // hashing functions always returns the same output given the same input
 const bcrypt = require('bcrypt')
 
-const userPassword = '12345password'
 // when the user signs up we want to hash our thier password and save it to the db
 const hashedPasword= bcrypt.hashSync(userPassword, 12)
 console.log(hashedPasword)
