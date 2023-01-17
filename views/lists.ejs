@@ -1,54 +1,51 @@
-<%- include('partials/header.ejs',{user}) %> 
+<%- include('partials/header.ejs',{user}) %>
 <!-- RENDERING LIST OF SONGS BASED ON SEARCH -->
-<% if(searchBy == 'songs'){ %> 
-<h1>
-    List of searches:
-</h1>
-<% if(search.length == 0 ){ %>
-    <br><p>No songs found</p> 
-    <%} %> 
-<% search.forEach(function(search){ %>
-    <div onclick="location.href='/search/songs/<%=search.track.commontrack_id%>';" class="column">
-        <p><%= search.track.track_name %><br> - <%= search.track.artist_name%></p>
-    </div>
-<%})%> 
-<% } else if(searchBy == 'artists'){ %> 
-    <!-- RENDERING LIST OF ARTISTS BASED ON SEARCH -->
-<h1>
-    List of artists:
-</h1>
-<% if(artistList.length ==0){ %>
-    <br><p>No results sorry</p>
-    <% } %>  
-<% artistList.forEach(function(search){ %>
-    <% let formId = `a${search.artist.artist_id}`%> 
-    <div onclick="document.getElementById('<%=formId%>').submit()" class="column">
-        <p type="submit"> <%= search.artist.artist_name %> </p>
-    </div>
-    <form id="<%=formId%>" action="/search/artists/songs">  
-        <input name="artistName" value="<%= search.artist.artist_name %>" hidden>
-        <input name="artistId" value="<%= search.artist.artist_id %>" hidden>
-    </form>
-<%})%>  
-<% } else if(searchBy=='artistSongs') {%>
-    <!-- RENDERING LIST OF SONGS BASED ON SPECIFIC ARTIST -->
-    <h1>
-        Popular tracks by <%=artistName%> 
-    </h1>
-    <%songs.forEach(function(song){%>
-        <div onclick="location.href='/search/songs/<%=song.track.commontrack_id%>';" class="column ">
-            <p><%= song.track.track_name%><br>- <%= song.track.artist_name%></p>
-        </div>
-    <% })%>
-<%}else{%>
-    <!-- RENDERING LIST OF USER SONG LIBRARY  -->
-    <h1>
-        List of all songs user has in playlists:
-    </h1>
-    <% song.forEach(function(track){ %>
-        <div onclick="location.href='/search/songs/<%=track.track%>';" class="column " >
-            <p><%= track.name%><br>- <%= track.artist%></p>
-        </div>
-    <%})%> 
-    <% } %> 
-<%- include('partials/footer.ejs') %> 
+<% if(searchBy=='songs' ){ %>
+<h1>List of searches:</h1>
+<% if(search.length==0 ){ %>
+<br />
+<p>No songs found</p>
+<%} %> <% search.forEach(function(search){ %>
+<div
+  onclick="location.href='/search/songs/<%=search.track.commontrack_id%>';"
+  class="column"
+>
+  <p>
+    <%= search.track.track_name %><br />
+    - <%= search.track.artist_name%>
+  </p>
+</div>
+<%})%> <% } else if(searchBy=='artists' ){ %>
+<!-- RENDERING LIST OF ARTISTS BASED ON SEARCH -->
+<h1>List of artists:</h1>
+<% if(artistList.length==0){ %>
+<br />
+<p>No results sorry</p>
+<% } %> <% artistList.forEach(function(search){ %> <% let
+formId=`a${search.artist.artist_id}`%>
+<div onclick="document.getElementById('<%=formId%>').submit()" class="column">
+  <p type="submit"><%= search.artist.artist_name %></p>
+</div>
+<form id="<%=formId%>" action="/search/artists/songs">
+  <input name="artistName" value="<%= search.artist.artist_name %>" hidden />
+  <input name="artistId" value="<%= search.artist.artist_id %>" hidden />
+</form>
+<%})%> <% } else if(searchBy=='artistSongs' ) {%>
+<!-- RENDERING LIST OF SONGS BASED ON SPECIFIC ARTIST -->
+<h1>Popular tracks by <%=artistName%></h1>
+<%songs.forEach(function(song){%>
+<div
+  onclick="location.href='/search/songs/<%=song.track.commontrack_id%>';"
+  class="column"
+>
+  <p><%= song.track.track_name%><br />- <%= song.track.artist_name%></p>
+</div>
+<% })%> <%}else{%>
+<!-- RENDERING LIST OF USER SONG LIBRARY  -->
+<h1>List of all songs user has in playlists:</h1>
+<% song.forEach(function(track){ %>
+<div onclick="location.href='/search/songs/<%=track.track%>';" class="column">
+  <p><%= track.name%><br />- <%= track.artist%></p>
+</div>
+<%})%> <% } %> 
+<%- include('partials/footer.ejs') %>

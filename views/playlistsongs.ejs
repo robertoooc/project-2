@@ -1,111 +1,154 @@
+<%- include('partials/header.ejs',{user}) %> <% if(view||owner){ %>
+<br />
+<h2>Playlist Name: <%=playlist.name%></h2>
+<h3>By: <%= playlist.user.name %></h3>
+<% if(songs.length==0){%>
+<br />
+<p>No songs in this playlist</p>
+<br />
+<%} %> <%songs.forEach(function(song){%>
+<div
+  class="column divider"
+  onclick="location.href='/search/songs/<%=song.track%>';"
+  style="
+    min-width: fit-content;
+    width: 30%;
+    min-height: fit-content;
+    height: 40px;
+    background-color: rgb(246, 245, 245);
+  "
+>
+  <p>
+    <%= song.name %> <br />
+    - <%= song.artist %>
+  </p>
+  <% if(owner){%>
+  <form
+    method="POST"
+    action="/playlists/<%=playlist.name%>/songs/<%=song.track%>/?_method=DELETE"
+  >
+    <button type="submit">Remove from playlist</button>
+  </form>
+  <%} %>
+</div>
+<%})%> <% if(owner){ %>
+<button
+  type="button"
+  onclick="openEditForm('form', 'openButton')"
+  id="openButton"
+>
+  Edit
+</button>
+<div id="form" class="hide">
+  <form method="POST" action="/playlists/?_method=PUT">
+    <input name="playlist" type="hidden" value="<%=playlist.name%>" />
+    <label for="newName">update name:</label>
+    <input id="newName" type="text" name="newName" autocomplete="off" />
+    <label for="public">public: </label>
+    <input id="public" value="public" type="radio" name="status" required />
+    <label for="private">private: </label>
+    <input id="private" value="private" type="radio" name="status" required />
+    <button type="submit">update</button>
+  </form>
+  <form method="POST" action="/playlists/?_method=DELETE">
+    <button name="deletePlaylist" type="submit" value="<%=playlist.name%>">
+      Delete
+    </button>
+  </form>
+  <button
+    type="button"
+    onclick="closeEditForm('form','openButton')"
+    id="closeButton"
+  >
+    Close
+  </button>
+</div>
+<% }else {%> <% if(user){%> <% if(userLike){ %>
+<p>You have this liked</p>
+<form method="POST" action="/playlists/likes?_method=DELETE">
+  <input name="playlistId" type="hidden" value="<%=playlist.id%>" />
+  <button type="submit">Remove Like</button>
+</form>
+<% }else{%>
+<form method="POST" action="/playlists/likes">
+  <input name="playlistId" type="hidden" value="<%=playlist.id%>" />
+  <button type="submit">Like</button>
+</form>
+<%} %>
+<form method="POST" action="/playlists/comments">
+  <input name="playlistId" type="hidden" value="<%=playlist.id%>" />
+  <p><label for="comment">Add a comment:</label></p>
+  <textarea id="comment" name="comment" required></textarea><br />
+  <button type="submit">Comment</button>
+</form>
+<br />
+<% } %> <% } %>
+<div class="commentSection">
+  <p><%= likes %> Likes</p>
+  <p><%=comments.length%> Comments</p>
 
-<%- include('partials/header.ejs',{user}) %>
-<% if(view||owner){ %>
-    <br>
-    <h2>Playlist Name: <%=playlist.name%></h2>    
-       <h3>By: <%= playlist.user.name %> </h3>
-       <% if(songs.length == 0){%> 
-           <br>
-           <p>No songs in this playlist</p>
-           <br>
-       <%} %> 
+  <button
+    type="button"
+    onclick="openEditForm('commentSection','openComments')"
+    id="openComments"
+  >
+    Open Comments
+  </button>
+  <div class="hide" id="commentSection">
+    <% comments.forEach(function(comment){%>
 
-    <%songs.forEach(function(song){%>
-       <div class="column divider" onclick ="location.href='/search/songs/<%=song.track%>';"
-       style="min-width:fit-content; width: 30%; min-height:fit-content; height: 40px; background-color: rgb(246, 245, 245);">
-               <p><%= song.name %> <br> - <%= song.artist %> </p>
-               <% if(owner){%>
-                   <form method='POST' action="/playlists/<%=playlist.name%>/songs/<%=song.track%>/?_method=DELETE">
-                       <button type="submit">Remove from playlist</button>
-                   </form>
-                   <%} %> 
-       </div>
-           <%})%>
-    <% if(owner){ %>
-        <button type="button" onclick="openEditForm('form', 'openButton')" id ="openButton" >Edit</button>
-        <div id="form" class ='hide'>
-            <form method ='POST' action="/playlists/?_method=PUT">
-                <input name="playlist" type="hidden" value="<%=playlist.name%>">
-                <label for="newName">update name:</label>
-                <input id="newName" type="text" name ='newName' autocomplete="off"/>
-                <label for="public">public: </label>
-                <input id='public' value='public' type ='radio' name='status' required/>
-                <label for="private">private: </label>
-                <input id='private' value='private' type ='radio' name='status' required/>
-                <button type="submit">update</button>
-            </form>
-            <form method="POST" action="/playlists/?_method=DELETE">
-                <button name="deletePlaylist" type="submit" value="<%=playlist.name%>">Delete</button>
-            </form>
-            <button type="button" onclick="closeEditForm('form','openButton')" id ="closeButton" >Close</button>
-        </div>
-    <% }else {%>
-        <% if(user){%>
-            <% if(userLike){ %>
-                <p>You have this liked </p>  
-                <form method="POST" action="/playlists/likes?_method=DELETE">
-                    <input name="playlistId" type="hidden" value="<%=playlist.id%>">
-                    <button type="submit">Remove Like</button>
-                </form>
-                <% }else{%>                 
-                    <form method="POST" action="/playlists/likes">
-                        <input name="playlistId" type="hidden" value="<%=playlist.id%>">
-                        <button type="submit">Like</button>
-                    </form>
-                    <%} %> 
-            <form method="POST" action="/playlists/comments">
-                <input name="playlistId" type="hidden" value="<%=playlist.id%>">
-                <p><label for="comment">Add a comment:</label></p>
-                <textarea id="comment" name="comment" required></textarea><br>
-                <button type="submit">Comment</button>
-            </form>
-            <br>
-       <% } %>  
-    <% } %>
-    <div class="commentSection">
-        <p><%= likes %> Likes</p>
-        <p><%=comments.length%> Comments</p>
-        
-        
-        <button type="button" onclick="openEditForm('commentSection','openComments')" id="openComments">Open Comments</button>
-        <div class = 'hide' id="commentSection">
-            <% comments.forEach(function(comment){%>
-                
-        <div class="column divider">
-            <img class="avatar" alt="<%=comment.user.name%> avatar" src = 'https://avatars.dicebear.com/api/bottts/<%=comment.user.name%><%=comment.user.id %>.svg?size=35'>
-            <div class="alignLeft">
-                <h2><%=comment.user.name%> </h2>
-                <p><%=comment.comment%> </p>
-            </div>
-            <% if(user){%> 
-                <%if(comment.userId==user.id){%>
-                    <% let formId = `a${comment.id}`%> 
-                    <% let buttonId = `b${comment.id}`%>  
-                    <ion-icon class="icon" onclick="openEditForm('<%=formId%>','<%=buttonId%>')" id ="<%=buttonId%>" name="ellipsis-vertical-circle-outline"></ion-icon>
-                    <div class ='hide' id="<%=formId%>">
-                        <form method="POST" action="/playlists/comments?_method=DELETE">
-                            <input name="commentId" type="hidden" value="<%=comment.id%>">
-                            <input name="playlistId" type="hidden" value="<%=playlist.id%>">
-                            <button type="submit">Delete Comment</button>
-                        </form>
-                        <form method="POST" action="/playlists/comments?_method=PUT">
-                            <input name="commentId" type="hidden" value="<%=comment.id%>">
-                            <input name="playlistId" type="hidden" value="<%=playlist.id%>">
-                            <textarea id="updatedComment" name="updatedComment" required></textarea>
-                            <button type="submit">Edit Comment</button>
-                        </form>
-                        
-                        <ion-icon class="icon" onclick="closeEditForm('<%=formId%>','<%=buttonId%>')" name="close-circle-outline"></ion-icon>
-                    </div>
-                    <%}  %> 
-                    <% } %> 
-                </div>
-                <%}) %>  
-                <button type="button" onclick="closeEditForm('commentSection','openComments')">Close Comments</button>
-            </div>
-        </div>
-            <% }else{ %>
-                <p>you do n0t have permistion</p>
-                <% } %> 
-                
-                <%- include('partials/footer.ejs') %> 
+    <div class="column divider">
+      <img
+        class="avatar"
+        alt="<%=comment.user.name%> avatar"
+        src="https://avatars.dicebear.com/api/bottts/<%=comment.user.name%><%=comment.user.id %>.svg?size=35"
+      />
+      <div class="alignLeft">
+        <h2><%=comment.user.name%></h2>
+        <p><%=comment.comment%></p>
+      </div>
+      <% if(user){%> <%if(comment.userId==user.id){%> <% let
+      formId=`a${comment.id}`%> <% let buttonId=`b${comment.id}`%>
+      <ion-icon
+        class="icon"
+        onclick="openEditForm('<%=formId%>','<%=buttonId%>')"
+        id="<%=buttonId%>"
+        name="ellipsis-vertical-circle-outline"
+      ></ion-icon>
+      <div class="hide" id="<%=formId%>">
+        <form method="POST" action="/playlists/comments?_method=DELETE">
+          <input name="commentId" type="hidden" value="<%=comment.id%>" />
+          <input name="playlistId" type="hidden" value="<%=playlist.id%>" />
+          <button type="submit">Delete Comment</button>
+        </form>
+        <form method="POST" action="/playlists/comments?_method=PUT">
+          <input name="commentId" type="hidden" value="<%=comment.id%>" />
+          <input name="playlistId" type="hidden" value="<%=playlist.id%>" />
+          <textarea
+            id="updatedComment"
+            name="updatedComment"
+            required
+          ></textarea>
+          <button type="submit">Edit Comment</button>
+        </form>
+
+        <ion-icon
+          class="icon"
+          onclick="closeEditForm('<%=formId%>','<%=buttonId%>')"
+          name="close-circle-outline"
+        ></ion-icon>
+      </div>
+      <%} %> <% } %>
+    </div>
+    <%}) %>
+    <button
+      type="button"
+      onclick="closeEditForm('commentSection','openComments')"
+    >
+      Close Comments
+    </button>
+  </div>
+</div>
+<% }else{ %>
+<p>you do n0t have permistion</p>
+<% } %> <%- include('partials/footer.ejs') %>

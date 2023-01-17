@@ -1,13 +1,17 @@
 <%- include('partials/header.ejs',{user}) %>
-<% if(typeof albums !== 'undefined'){%>
-<% albums.forEach(function(album){%>
-    <p><a href="/search/albums/<%= album.album.album_id %>"><%= album.album.album_name %> </a></p>
-<%}) %> 
-<%} %> 
+    <% if(typeof albums !=='undefined' ){%>
+        <% albums.forEach(function(album){%>
+            <p><a href="/search/albums/<%= album.album.album_id %>">
+                    <%= album.album.album_name %>
+                </a></p>
+            <%}) %>
+                <%} %>
 
-<% if(typeof tracks !== 'undefined'){%>
-    <% tracks.forEach(function(song){ %>
-    <p><a href="/search/songs/<%=song.track.commontrack_id%>"><%= song.track.track_name %></a></p>
-    <%}) %> 
-<%} %> 
-<%- include('partials/footer.ejs') %> 
+                    <% if(typeof tracks !=='undefined' ){%>
+                        <% tracks.forEach(function(song){ %>
+                            <p><a href="/search/songs/<%=song.track.commontrack_id%>">
+                                    <%= song.track.track_name %>
+                                </a></p>
+                            <%}) %>
+                                <%} %>
+                                    <%- include('partials/footer.ejs') %>
