@@ -3,7 +3,8 @@ require('dotenv').config()
 const db = require('../models')
 const router = express.Router()
 const axios = require('axios')
-
+const API_KEY =process.env.API_KEY
+const OTHER_KEY =process.env.OTHER_KEY
 //== RENDERS THE GET ALL SONGS FROM ALL PLAYLISTS CORRESPONDING TO USER
 //
 router.get('/songs', async function(req,res){
